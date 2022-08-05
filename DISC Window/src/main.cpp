@@ -5,23 +5,19 @@
     pin 2:  LED Strip #1
 */
 
+#include "CTeensy4Controller.h"
 #include <OctoWS2811.h>
-
-#define RED    0xFF0000
-#define GREEN  0x00FF00
-#define BLUE   0x0000FF
-#define YELLOW 0xFFFF00
-#define PINK   0xFF1088
-#define ORANGE 0xE05800
-#define WHITE  0xFFFFFF
+#include <FastLED.h>
+#include <Arduino.h>
 
 // Any group of digital pins may be used
-const int numPins = 1;
-byte pinList[numPins] = {2};
+const int numPins = 3;
+byte pinList[numPins] = {4, 3, 2};
 
-const int ledsPerStrip = 27;
-const int bytesPerLED = 4;  // RGBW
-const int config = WS2811_BGR | WS2811_800kHz;
+const int ledsPerSection = 27;
+const int sectionsPerStrip = 4;
+const int ledsPerStrip = ledsPerSection * sectionsPerStrip;
+const int bytesPerLED = 4;  // RGBW 
 
 // These buffers need to be large enough for all the pixels.
 // The total number of pixels is "ledsPerStrip * numPins".
@@ -31,41 +27,35 @@ const int config = WS2811_BGR | WS2811_800kHz;
 DMAMEM int displayMemory[ledsPerStrip * numPins * bytesPerLED / 4];
 int drawingMemory[ledsPerStrip * numPins * bytesPerLED / 4];
 
-
-OctoWS2811 leds(
+CRGB ledarray[numPins * ledsPerStrip];
+OctoWS2811 octo(
   ledsPerStrip,
   displayMemory,
   drawingMemory,
-  config,
+  WS2811_BGR | WS2811_800kHz,
   numPins,
   pinList
 );
+CTeensy4Controller<BGR, WS2811_800kHz> *pcontroller;
 
 void setup() {
   Serial.begin(9600);
   Serial.println("DISC Window Initializing");
-  leds.begin();
-  leds.show();
-}
-
-void colorWipe(int color, int wait)
-{
-  for (int i=0; i < leds.numPixels(); i++) {
-    leds.setPixel(i, color);
-    leds.show();
-    delayMicroseconds(wait);
-  }
+  octo.begin();
+  pcontroller = new CTeensy4Controller<BGR, WS2811_800kHz>(&octo);
+  FastLED.setBrightness(255);
+  FastLED.addLeds(pcontroller, ledarray, numPins * ledsPerStrip);
+  Serial.println("OCTOWS2811 and FastLED Initialized!");
 }
 
 void loop() {
-  int microsec = 2000000 / leds.numPixels();  // change them all in 2 seconds
+  uint16_t sinBeat = beatsin16(5, 0, (numPins * ledsPerStrip) - 1, 0, 0);
+  uint8_t sinBeat2 = beatsin8(7, 0, 255, 0, 0);
 
-  colorWipe(RED, microsec);
-  colorWipe(GREEN, microsec);
-  colorWipe(BLUE, microsec);
-  colorWipe(YELLOW, microsec);
-  colorWipe(PINK, microsec);
-  colorWipe(ORANGE, microsec);
-  colorWipe(WHITE, microsec);
+  ledarray[sinBeat] = CHSV(sinBeat2, 255, 255);
+
+  fadeToBlackBy(ledarray, (numPins * ledsPerStrip), 1);
+
+  FastLED.show();
   Serial.println("loop complete");
 }
