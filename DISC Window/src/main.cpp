@@ -1,8 +1,10 @@
-/*  OctoWS2811 Teensy4 Window Controller 
+/*  OctoWS2811 + FastLED Teensy 4.0 Window Controller 
 
   Required Connections
   --------------------
-    pin 2:  LED Strip #1
+    pin 4:  LED Strip #1
+    pin 3:  LED Strip #2
+    pin 2:  LED Strip #3
 */
 
 #include "CTeensy4Controller.h"
@@ -10,14 +12,18 @@
 #include <FastLED.h>
 #include <Arduino.h>
 
+#define BRIGHTNESS 255 
+
 // Any group of digital pins may be used
-const int numPins = 3;
+const uint8_t numPins = 3;
 byte pinList[numPins] = {4, 3, 2};
 
-const int ledsPerSection = 27;
-const int sectionsPerStrip = 4;
-const int ledsPerStrip = ledsPerSection * sectionsPerStrip;
-const int bytesPerLED = 4;  // RGBW 
+const uint8_t ledsPerSection = 27;
+const uint8_t sectionsPerStrip = 4;
+const uint8_t ledsPerStrip = ledsPerSection * sectionsPerStrip;
+const uint8_t bytesPerLED = 4;  // RGBW = one byte per RGB+W
+const uint8_t kMatrixWidth = ledsPerSection;
+const uint8_t kMatrixHeight = 12;
 
 // These buffers need to be large enough for all the pixels.
 // The total number of pixels is "ledsPerStrip * numPins".
@@ -27,6 +33,10 @@ const int bytesPerLED = 4;  // RGBW
 DMAMEM int displayMemory[ledsPerStrip * numPins * bytesPerLED / 4];
 int drawingMemory[ledsPerStrip * numPins * bytesPerLED / 4];
 
+// Setup the following drawing spaces:
+//   * CRGB array the main program writes changes to
+//   * OctoWS2811 pointer for syncing LED values to strip
+//   * CTeensy4Controller - FastLED->OctoWS2811 bridge controller
 CRGB ledarray[numPins * ledsPerStrip];
 OctoWS2811 octo(
   ledsPerStrip,
@@ -48,14 +58,62 @@ void setup() {
   Serial.println("OCTOWS2811 and FastLED Initialized!");
 }
 
-void loop() {
-  uint16_t sinBeat = beatsin16(5, 0, (numPins * ledsPerStrip) - 1, 0, 0);
-  uint8_t sinBeat2 = beatsin8(7, 0, 255, 0, 0);
+// XY(x,y) takes x and y coordinates and returns an LED index number,
+//     for use like this:  leds[ XY(x,y) ] == CRGB::Red;
+//     No error checking is performed on the ranges of x and y.
+uint16_t XY( uint8_t x, uint8_t y){
+  uint16_t i;
+  
+  if( y & 0x01) {
+    // Odd rows run backwards
+    uint8_t reverseX = (kMatrixWidth - 1) - x;
+    i = (y * kMatrixWidth) + reverseX;
+  } else {
+    // Even rows run forwards
+    i = (y * kMatrixWidth) + x;
+  }
 
-  ledarray[sinBeat] = CHSV(sinBeat2, 255, 255);
+  return i;
+}
 
-  fadeToBlackBy(ledarray, (numPins * ledsPerStrip), 1);
+// XYsafe(x,y) takes x and y coordinates and returns an LED index number,
+//     for use like this:  leds[ XYsafe(x,y) ] == CRGB::Red;
+//     Error checking IS performed on the ranges of x and y, and an
+//     index of "-1" is returned.  Special instructions below
+//     explain how to use this without having to do your own error
+//     checking every time you use this function.  
+//     This is a slightly more advanced technique, and 
+//     it REQUIRES SPECIAL ADDITIONAL setup, described below.
+uint16_t XYsafe( uint8_t x, uint8_t y){
+  if( x >= kMatrixWidth) return -1;
+  if( y >= kMatrixHeight) return -1;
+  return XY(x,y);
+}
 
+void DrawOneFrame( uint8_t startHue8, int8_t yHueDelta8, int8_t xHueDelta8){
+  uint8_t lineStartHue = startHue8;
+  for( uint8_t y = 0; y < kMatrixHeight; y++) {
+    lineStartHue += yHueDelta8;
+    uint8_t pixelHue = lineStartHue;      
+    for( uint8_t x = 0; x < kMatrixWidth; x++) {
+      pixelHue += xHueDelta8;
+      ledarray[XYsafe(x, y)]  = CHSV( pixelHue, 255, 255);
+    }
+  }
+}
+
+// Draw a rainbow circle - are we fitting in yet?!
+void loop(){
+  uint32_t ms = millis();
+  Serial.print(ms);
+  Serial.println(": loop start");
+  int32_t yHueDelta32 = ((int32_t)cos16( ms * (7/1) ) * (kMatrixWidth));
+  int32_t xHueDelta32 = ((int32_t)cos16( ms * (14/1) ) * (kMatrixHeight));
+  DrawOneFrame( ms / 65536, yHueDelta32 / 32768, xHueDelta32 / 32768);
+  if( ms < 5000 ) {
+    FastLED.setBrightness( scale8( BRIGHTNESS, (ms * 256) / 5000));
+  } else {
+    FastLED.setBrightness(BRIGHTNESS);
+  }
   FastLED.show();
-  Serial.println("loop complete");
 }
