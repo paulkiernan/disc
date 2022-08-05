@@ -1,3 +1,6 @@
+#ifndef CTEENSY4CONTROLLER_H_INCLUDED
+#define CTEENSY4CONTROLLER_H_INCLUDED
+
 #include <OctoWS2811.h>
 #include <FastLED.h>
 
@@ -29,3 +32,5 @@ public:
         pocto->show();
     }
 };
+
+#endif

@@ -8,15 +8,18 @@
 */
 
 #include "CTeensy4Controller.h"
+#include "logging.h"
 #include <OctoWS2811.h>
 #include <FastLED.h>
+#include <ArduinoLog.h>
 #include <Arduino.h>
-
+ 
+//#define DISABLE_LOGGING 
 #define BRIGHTNESS 255 
 
 // Any group of digital pins may be used
 const uint8_t numPins = 3;
-byte pinList[numPins] = {4, 3, 2};
+const uint8_t pinList[numPins] = {4, 3, 2};
 
 const uint8_t ledsPerSection = 27;
 const uint8_t sectionsPerStrip = 4;
@@ -50,16 +53,19 @@ CTeensy4Controller<BGR, WS2811_800kHz> *pcontroller;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("DISC Window Initializing");
+  Log.begin   (LOG_LEVEL_VERBOSE, &Serial);
+  Log.setPrefix(printTimestamp);
+
+  Log.noticeln("DISC Window Initializing");
   octo.begin();
   pcontroller = new CTeensy4Controller<BGR, WS2811_800kHz>(&octo);
   FastLED.setBrightness(255);
   FastLED.addLeds(pcontroller, ledarray, numPins * ledsPerStrip);
-  Serial.println("OCTOWS2811 and FastLED Initialized!");
+  Log.noticeln("OCTOWS2811 and FastLED Initialized!");
 }
 
-// XY(x,y) takes x and y coordinates and returns an LED index number,
-//     for use like this:  leds[ XY(x,y) ] == CRGB::Red;
+// XY(x,y) takes x and y coordinates and returns an LED index number, for use
+// like this:  leds[ XY(x,y) ] == CRGB::Red;
 //     No error checking is performed on the ranges of x and y.
 uint16_t XY( uint8_t x, uint8_t y){
   uint16_t i;
@@ -76,14 +82,10 @@ uint16_t XY( uint8_t x, uint8_t y){
   return i;
 }
 
-// XYsafe(x,y) takes x and y coordinates and returns an LED index number,
-//     for use like this:  leds[ XYsafe(x,y) ] == CRGB::Red;
-//     Error checking IS performed on the ranges of x and y, and an
-//     index of "-1" is returned.  Special instructions below
-//     explain how to use this without having to do your own error
-//     checking every time you use this function.  
-//     This is a slightly more advanced technique, and 
-//     it REQUIRES SPECIAL ADDITIONAL setup, described below.
+// XYsafe(x,y) takes x and y coordinates and returns an LED index number, for
+// use like this:  leds[ XYsafe(x,y) ] == CRGB::Red;
+//     Error checking IS performed on the ranges of x and y, and an index of
+//     "-1" is returned. 
 uint16_t XYsafe( uint8_t x, uint8_t y){
   if( x >= kMatrixWidth) return -1;
   if( y >= kMatrixHeight) return -1;
@@ -104,16 +106,18 @@ void DrawOneFrame( uint8_t startHue8, int8_t yHueDelta8, int8_t xHueDelta8){
 
 // Draw a rainbow circle - are we fitting in yet?!
 void loop(){
+  logFPS(1);
+
   uint32_t ms = millis();
-  Serial.print(ms);
-  Serial.println(": loop start");
   int32_t yHueDelta32 = ((int32_t)cos16( ms * (7/1) ) * (kMatrixWidth));
   int32_t xHueDelta32 = ((int32_t)cos16( ms * (14/1) ) * (kMatrixHeight));
   DrawOneFrame( ms / 65536, yHueDelta32 / 32768, xHueDelta32 / 32768);
+
   if( ms < 5000 ) {
     FastLED.setBrightness( scale8( BRIGHTNESS, (ms * 256) / 5000));
   } else {
     FastLED.setBrightness(BRIGHTNESS);
   }
+
   FastLED.show();
 }
