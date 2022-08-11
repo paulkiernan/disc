@@ -43,9 +43,9 @@ const uint8_t bytesPerLED = 3;  // RGB = one byte per RGB
 const uint8_t diagnosticLED = LED_BUILTIN; 
 
 // Colour + pulse starting and ending conditions 
-const uint8_t hueStart = 100; 
-const uint8_t satStart = 100;
-const uint8_t hueEnd = 100;
+const uint8_t hueStart = 50; 
+const uint8_t satStart = 255;
+const uint8_t hueEnd = 130;
 const uint8_t satEnd = 255;
 const float_t valueMin = 150.0; 
 const float_t valueMax = BRIGHTNESS;
