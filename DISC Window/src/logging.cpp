@@ -16,7 +16,7 @@ void printTimestamp(Print* _logOutput) {
 }
 
 // Logs the framerate of the FastLED loop on every `seconds` 
-static inline void logFPS(const int seconds){
+static inline void logFPS(const int seconds) {
   static uint32_t lastMillis;
   static uint32_t frameCount;
   static uint16_t framesPerSecond;
@@ -27,6 +27,25 @@ static inline void logFPS(const int seconds){
     framesPerSecond = frameCount / seconds;
     Log.traceln("fps: %u", framesPerSecond);
     frameCount = 0;
+    lastMillis = now;
+  }
+}
+
+// Blinks the on-board LED every `milliseconds` 
+static inline void blinkLED(const int ledPin, const int milliseconds) {
+  static uint32_t lastMillis;
+  static uint8_t ledState;
+
+  pinMode(ledPin, OUTPUT);
+  
+  uint32_t now = millis();
+  if (now - lastMillis >= milliseconds) {
+    if (ledState == LOW) {
+      ledState = HIGH;
+    } else {
+      ledState = LOW;
+    }
+    digitalWrite(ledPin, ledState);
     lastMillis = now;
   }
 }

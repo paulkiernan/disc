@@ -27,6 +27,7 @@ const uint8_t ledsPerStrip = ledsPerSection * sectionsPerStrip;
 const uint8_t bytesPerLED = 4;  // RGBW = one byte per RGB+W
 const uint8_t kMatrixWidth = ledsPerSection;
 const uint8_t kMatrixHeight = 12;
+const uint8_t diagnosticLED = LED_BUILTIN; 
 
 // These buffers need to be large enough for all the pixels.
 // The total number of pixels is "ledsPerStrip * numPins".
@@ -106,6 +107,7 @@ void DrawOneFrame( uint8_t startHue8, int8_t yHueDelta8, int8_t xHueDelta8){
 
 // Draw a rainbow circle - are we fitting in yet?!
 void loop(){
+  blinkLED(diagnosticLED, 500);
   logFPS(1);
 
   uint32_t ms = millis();
