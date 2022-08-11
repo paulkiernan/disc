@@ -42,18 +42,33 @@ const uint8_t ledsPerStrip = actualLEDsPerStrip + 1;
 const uint8_t bytesPerLED = 3;  // RGB = one byte per RGB
 const uint8_t diagnosticLED = LED_BUILTIN; 
 
+// Colour + pulse starting and ending conditions 
+const uint8_t hueStart = 100; 
+const uint8_t satStart = 100;
+const uint8_t hueEnd = 100;
+const uint8_t satEnd = 255;
+const float_t valueMin = 150.0; 
+const float_t valueMax = BRIGHTNESS;
+const float_t pulseSpeed = 0.80;
+const float_t delta = (valueMax - valueMin) / 2.35040238;
+
+// Volatile Working Colour Space
+volatile uint8_t hue = hueStart;
+volatile uint8_t sat = satStart;
+volatile float_t val = valueMin;
+
 // These buffers need to be large enough for all the pixels.
 // The total number of pixels is "ledsPerStrip * NUM_PINS".
 // Each pixel needs 4 bytes, so multiply by 4.  An "int" is
 // 4 bytes, so divide by 4.  The array is created using "int"
 // so the compiler will align it to 32 bit memory.
-DMAMEM int displayMemory[ledsPerStrip * NUM_PINS * bytesPerLED / 4];
-int drawingMemory[ledsPerStrip * NUM_PINS * bytesPerLED / 4];
-
+//
 // Setup the following drawing spaces:
 //   * CRGB array the main program writes changes to
 //   * OctoWS2811 pointer for syncing LED values to strip
 //   * CTeensyLCController - FastLED->OctoWS2811 bridge controller
+DMAMEM int displayMemory[ledsPerStrip * NUM_PINS * bytesPerLED / 4];
+int drawingMemory[ledsPerStrip * NUM_PINS * bytesPerLED / 4];
 CRGB ledarray[NUM_PINS * ledsPerStrip];
 OctoWS2811 octo(
   ledsPerStrip,
@@ -71,20 +86,22 @@ void setup() {
   Log.noticeln("DISC Sewer Initializing");
   octo.begin();
   pcontroller = new CTeensyLCController<RBG, WS2811_800kHz>(&octo);
-  FastLED.setBrightness(255);
+  FastLED.setBrightness(BRIGHTNESS);
   FastLED.addLeds(pcontroller, ledarray, NUM_PINS * ledsPerStrip);
   Log.noticeln("OCTOWS2811 and FastLED Initialized!");
 }
 
-void DrawOneFrame(uint32_t ms){
-  if( ms < 10000 ) {
-    FastLED.setBrightness( scale8( BRIGHTNESS, (ms * 256) / 10000));
-  } else {
-    FastLED.setBrightness(BRIGHTNESS);
-  }
+void DrawSewerFrame(uint32_t ms){
+  float dV = ((exp(sin(pulseSpeed * ms/2000.0*PI)) -0.36787944) * delta);
+  val = valueMin + dV;
+  hue = map(val, valueMin, valueMax, hueStart, hueEnd);
+  sat = map(val, valueMin, valueMax, satStart, satEnd);
 
-  for( uint8_t y = 0; y < ledsPerStrip * NUM_PINS; y++) {
-    ledarray[y]  = CRGB::Green; 
+  for (int i = 0; i < ledsPerStrip * NUM_PINS; i++) {
+    ledarray[i] = CHSV(hue, sat, val);
+    ledarray[i].r = dim8_video(ledarray[i].r);
+    ledarray[i].g = dim8_video(ledarray[i].g);
+    ledarray[i].b = dim8_video(ledarray[i].b);
   }
 }
 
@@ -94,7 +111,7 @@ void loop(){
   logFPS(1);
 
   uint32_t ms = millis();
-  DrawOneFrame(ms);
+  DrawSewerFrame(ms);
 
   FastLED.show();
 }
