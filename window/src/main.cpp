@@ -14,6 +14,7 @@
 #include <ArduinoLog.h>
 #include <Arduino.h>
 #include <set>
+#include <map>
  
 //#define DISABLE_LOGGING 
 #define BRIGHTNESS 255 
@@ -39,20 +40,21 @@ inline bool operator<(const Point& P1, const Point& P2){
   return P1.x < P2.x || (P1.x == P2.x && P1.y < P2.y);
 }
 std::set<Point> streetLightCoordinatesHuman = {
-  {0,0}, {1,0},
-  {0,1}, {1,1}, {2,1},
-  {0,2}, {1,2}, {2,2},
-  {0,3}, {1,3}, {2,3}, {3,3},
-  {0,4}, {1,4}, {2,4}, {3,4},
-  {0,5}, {1,5}, {2,5}, {3,5}, {4,5},
-  {0,6}, {1,6}, {2,6}, {3,6}, {4,6},
-  {0,7}, {1,7}, {2,7}, {3,7}, {4,7}, {5,7},
-  {0,8}, {1,8}, {2,8}, {3,8}, {4,8}, {5,8},
-  {0,9}, {1,9}, {2,9}, {3,9}, {4,9}, {5,9}, {6, 9},
-  {0,10}, {1,10}, {2,10}, {3,10}, {4,10}, {5,10}, {6, 10},
-  {0,11}, {1,11}, {2,11}, {3,11}, {4,11}, {5,11}, {6, 11}, {7, 11}
+  {0,  0}, {1,  0},
+  {0,  1}, {1,  1}, {2,  1},
+  {0,  2}, {1,  2}, {2,  2},
+  {0,  3}, {1,  3}, {2,  3}, {3,  3},
+  {0,  4}, {1,  4}, {2,  4}, {3,  4},
+  {0,  5}, {1,  5}, {2,  5}, {3,  5}, {4,  5},
+  {0,  6}, {1,  6}, {2,  6}, {3,  6}, {4,  6},
+  {0,  7}, {1,  7}, {2,  7}, {3,  7}, {4,  7}, {5,  7},
+  {0,  8}, {1,  8}, {2,  8}, {3,  8}, {4,  8}, {5,  8},
+  {0,  9}, {1,  9}, {2,  9}, {3,  9}, {4,  9}, {5,  9}, {6,  9},
+  {0, 10}, {1, 10}, {2, 10}, {3, 10}, {4, 10}, {5, 10}, {6, 10},
+  {0, 11}, {1, 11}, {2, 11}, {3, 11}, {4, 11}, {5, 11}, {6, 11}, {7, 11}
 };
 std::set<Point> streetLightCoordinates; 
+std::map<uint32_t, CRGB> pixelDefaultColors;
 
 // These buffers need to be large enough for all the pixels.
 // The total number of pixels is "ledsPerStrip * numPins".
@@ -93,7 +95,11 @@ void setup() {
   octo.begin();
   pcontroller = new CTeensy4Controller<BGR, WS2813_800kHz>(&octo);
   FastLED.setBrightness(255);
-  FastLED.addLeds(pcontroller, ledarray, numPins * ledsPerStrip);
+  FastLED.addLeds(
+    pcontroller,
+    ledarray,
+    numPins * ledsPerStrip
+  ).setCorrection(TypicalPixelString);
   Log.noticeln("OCTOWS2811 and FastLED Initialized!");
 }
 
@@ -123,38 +129,70 @@ uint16_t XYsafe( uint8_t x, uint8_t y){
   return XY(x,y);
 }
 
-void DrawPassingCar( uint16_t mls ){
+void DrawPassingCar(uint16_t ms){
 }
 
-void DrawOneFrame( uint16_t mls ){
+void flicker(std::set<Point> coords){
+  int number_flickers = random(2, 6);
+  std::map<uint32_t, CRGB> originalColors;
+
+  for (int i=0; i < number_flickers; i++) {
+
+    for (auto itr = coords.begin(); itr != coords.end(); itr++){
+      uint16_t index = XYsafe(itr->x, itr->y);
+      originalColors[index] = ledarray[index];
+      ledarray[index] = blend(pixelDefaultColors[index], CRGB::Black, 200);
+    }
+
+    FastLED.show();
+    int delay_ms = random(50, 100);
+    delay(delay_ms);
+
+    for (auto itr = coords.begin(); itr != coords.end(); itr++){
+      uint16_t index = XYsafe(itr->x, itr->y);
+      ledarray[index] = originalColors[index];
+    }
+    FastLED.show();
+  }
+}
+
+void DrawOneFrame(){
   for( uint8_t y = 0; y < kMatrixHeight; y++) {
     for( uint8_t x = 0; x < kMatrixWidth; x++) {
+      uint32_t index = XYsafe(x, y);
 
       // Draw background light 
+      CRGB col;
       if (y <= 2) {
-        ledarray[XYsafe(x, y)] = CRGB::DarkSlateBlue;
+        col = CRGB::DarkSlateBlue;
       } else if (y >= kMatrixHeight - 1) {
-        ledarray[XYsafe(x, y)] = CRGB::PaleVioletRed;
+        col = CRGB::PaleVioletRed;
       } else {
-        ledarray[XYsafe(x, y)] = CRGB::DarkOrchid;
+        col = CRGB::DarkViolet;
       }
+      ledarray[index] = col;
+      pixelDefaultColors[index] = col;
 
-      // Draw artifacts like ambient streetlamps, etc.
+      // Blend in artifacts like ambient streetlamps, etc.
       if (streetLightCoordinates.find({x, y}) != streetLightCoordinates.end()){
-        //Log.noticeln("working: %u, %u", x, y);
-        ledarray[XYsafe(x, y)] = CRGB::DarkGoldenrod;
+        auto existingColor = ledarray[index];
+        ledarray[index] = blend(existingColor, CRGB::DarkGoldenrod, 200);
       }
     }
   }
 }
 
-// Draw a rainbow circle - are we fitting in yet?!
 void loop(){
   blinkLED(diagnosticLED, 500);
   logFPS(1);
 
   uint32_t ms = millis();
-  DrawOneFrame(ms); 
+  DrawOneFrame(); 
+
+  long random_5000 = random(5000);
+  if(random_5000 <= 1){
+    flicker(streetLightCoordinates);
+  } 
 
   FastLED.show();
 }
