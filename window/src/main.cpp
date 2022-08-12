@@ -13,6 +13,7 @@
 #include <FastLED.h>
 #include <ArduinoLog.h>
 #include <Arduino.h>
+#include <set>
  
 //#define DISABLE_LOGGING 
 #define BRIGHTNESS 255 
@@ -29,37 +30,68 @@ const uint8_t kMatrixWidth = ledsPerSection;
 const uint8_t kMatrixHeight = 12;
 const uint8_t diagnosticLED = LED_BUILTIN; 
 
+// Const Coordinates for fixed objects
+struct Point{
+  int x;
+  int y;
+};
+inline bool operator<(const Point& P1, const Point& P2){
+  return P1.x < P2.x || (P1.x == P2.x && P1.y < P2.y);
+}
+std::set<Point> streetLightCoordinatesHuman = {
+  {0,0}, {1,0},
+  {0,1}, {1,1}, {2,1},
+  {0,2}, {1,2}, {2,2},
+  {0,3}, {1,3}, {2,3}, {3,3},
+  {0,4}, {1,4}, {2,4}, {3,4},
+  {0,5}, {1,5}, {2,5}, {3,5}, {4,5},
+  {0,6}, {1,6}, {2,6}, {3,6}, {4,6},
+  {0,7}, {1,7}, {2,7}, {3,7}, {4,7}, {5,7},
+  {0,8}, {1,8}, {2,8}, {3,8}, {4,8}, {5,8},
+  {0,9}, {1,9}, {2,9}, {3,9}, {4,9}, {5,9}, {6, 9},
+  {0,10}, {1,10}, {2,10}, {3,10}, {4,10}, {5,10}, {6, 10},
+  {0,11}, {1,11}, {2,11}, {3,11}, {4,11}, {5,11}, {6, 11}, {7, 11}
+};
+std::set<Point> streetLightCoordinates; 
+
 // These buffers need to be large enough for all the pixels.
 // The total number of pixels is "ledsPerStrip * numPins".
 // Each pixel needs 4 bytes, so multiply by 4.  An "int" is
 // 4 bytes, so divide by 4.  The array is created using "int"
 // so the compiler will align it to 32 bit memory.
-DMAMEM int displayMemory[ledsPerStrip * numPins * bytesPerLED / 4];
-int drawingMemory[ledsPerStrip * numPins * bytesPerLED / 4];
-
+//
 // Setup the following drawing spaces:
 //   * CRGB array the main program writes changes to
 //   * OctoWS2811 pointer for syncing LED values to strip
 //   * CTeensy4Controller - FastLED->OctoWS2811 bridge controller
+DMAMEM int displayMemory[ledsPerStrip * numPins * bytesPerLED / 4];
+int drawingMemory[ledsPerStrip * numPins * bytesPerLED / 4];
 CRGB ledarray[numPins * ledsPerStrip];
 OctoWS2811 octo(
   ledsPerStrip,
   displayMemory,
   drawingMemory,
-  WS2811_BGR | WS2811_800kHz,
+  WS2811_RGB | WS2813_800kHz,
   numPins,
   pinList
 );
-CTeensy4Controller<BGR, WS2811_800kHz> *pcontroller;
+CTeensy4Controller<BGR, WS2813_800kHz> *pcontroller;
 
 void setup() {
   Serial.begin(9600);
   Log.begin   (LOG_LEVEL_VERBOSE, &Serial);
   Log.setPrefix(printTimestamp);
 
+  // Translate coordinates 
+  for (auto itr = streetLightCoordinatesHuman.begin(); itr != streetLightCoordinatesHuman.end(); itr++){
+    Point flippedCoord = {kMatrixWidth - itr->x - 1, kMatrixHeight - itr->y -1};
+    streetLightCoordinates.insert(flippedCoord);
+    Log.noticeln("flipped coord: %u, %u", flippedCoord.x, flippedCoord.y);
+  }
+
   Log.noticeln("DISC Window Initializing");
   octo.begin();
-  pcontroller = new CTeensy4Controller<BGR, WS2811_800kHz>(&octo);
+  pcontroller = new CTeensy4Controller<BGR, WS2813_800kHz>(&octo);
   FastLED.setBrightness(255);
   FastLED.addLeds(pcontroller, ledarray, numPins * ledsPerStrip);
   Log.noticeln("OCTOWS2811 and FastLED Initialized!");
@@ -71,12 +103,10 @@ void setup() {
 uint16_t XY( uint8_t x, uint8_t y){
   uint16_t i;
   
-  if( y & 0x01) {
-    // Odd rows run backwards
+  if( y & 0x01) {  // Odd rows run backwards
     uint8_t reverseX = (kMatrixWidth - 1) - x;
     i = (y * kMatrixWidth) + reverseX;
-  } else {
-    // Even rows run forwards
+  } else {         // Even rows run forwards
     i = (y * kMatrixWidth) + x;
   }
 
@@ -93,14 +123,27 @@ uint16_t XYsafe( uint8_t x, uint8_t y){
   return XY(x,y);
 }
 
-void DrawOneFrame( uint8_t startHue8, int8_t yHueDelta8, int8_t xHueDelta8){
-  uint8_t lineStartHue = startHue8;
+void DrawPassingCar( uint16_t mls ){
+}
+
+void DrawOneFrame( uint16_t mls ){
   for( uint8_t y = 0; y < kMatrixHeight; y++) {
-    lineStartHue += yHueDelta8;
-    uint8_t pixelHue = lineStartHue;      
     for( uint8_t x = 0; x < kMatrixWidth; x++) {
-      pixelHue += xHueDelta8;
-      ledarray[XYsafe(x, y)]  = CHSV( pixelHue, 255, 255);
+
+      // Draw background light 
+      if (y <= 2) {
+        ledarray[XYsafe(x, y)] = CRGB::DarkSlateBlue;
+      } else if (y >= kMatrixHeight - 1) {
+        ledarray[XYsafe(x, y)] = CRGB::PaleVioletRed;
+      } else {
+        ledarray[XYsafe(x, y)] = CRGB::DarkOrchid;
+      }
+
+      // Draw artifacts like ambient streetlamps, etc.
+      if (streetLightCoordinates.find({x, y}) != streetLightCoordinates.end()){
+        //Log.noticeln("working: %u, %u", x, y);
+        ledarray[XYsafe(x, y)] = CRGB::DarkGoldenrod;
+      }
     }
   }
 }
@@ -111,15 +154,7 @@ void loop(){
   logFPS(1);
 
   uint32_t ms = millis();
-  int32_t yHueDelta32 = ((int32_t)cos16( ms * (7/1) ) * (kMatrixWidth));
-  int32_t xHueDelta32 = ((int32_t)cos16( ms * (14/1) ) * (kMatrixHeight));
-  DrawOneFrame( ms / 65536, yHueDelta32 / 32768, xHueDelta32 / 32768);
-
-  if( ms < 5000 ) {
-    FastLED.setBrightness( scale8( BRIGHTNESS, (ms * 256) / 5000));
-  } else {
-    FastLED.setBrightness(BRIGHTNESS);
-  }
+  DrawOneFrame(ms); 
 
   FastLED.show();
 }
