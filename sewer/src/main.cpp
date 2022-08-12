@@ -43,11 +43,11 @@ const uint8_t bytesPerLED = 3;  // RGB = one byte per RGB
 const uint8_t diagnosticLED = LED_BUILTIN; 
 
 // Colour + pulse starting and ending conditions 
-const uint8_t hueStart = 50; 
+const uint8_t hueStart = 50 * (360/255); 
+const uint8_t hueEnd = 95 * (360/255); 
 const uint8_t satStart = 255;
-const uint8_t hueEnd = 130;
 const uint8_t satEnd = 255;
-const float_t valueMin = 150.0; 
+const float_t valueMin = 200.0; 
 const float_t valueMax = BRIGHTNESS;
 const float_t pulseSpeed = 0.80;
 const float_t delta = (valueMax - valueMin) / 2.35040238;
@@ -91,13 +91,15 @@ void setup() {
   Log.noticeln("OCTOWS2811 and FastLED Initialized!");
 }
 
+// Draw a glowing effect, pulsing the under-grate lights between yellow and
+// green
 void DrawSewerFrame(uint32_t ms){
   float dV = ((exp(sin(pulseSpeed * ms/2000.0*PI)) -0.36787944) * delta);
   val = valueMin + dV;
   hue = map(val, valueMin, valueMax, hueStart, hueEnd);
   sat = map(val, valueMin, valueMax, satStart, satEnd);
 
-  for (int i = 0; i < ledsPerStrip * NUM_PINS; i++) {
+  for (int i = ledsPerStrip * 7; i < (ledsPerStrip * 7) + ledsPerStrip; i++) {
     ledarray[i] = CHSV(hue, sat, val);
     ledarray[i].r = dim8_video(ledarray[i].r);
     ledarray[i].g = dim8_video(ledarray[i].g);
@@ -105,7 +107,11 @@ void DrawSewerFrame(uint32_t ms){
   }
 }
 
-// Draw a rainbow circle - are we fitting in yet?!
+// Main program loop
+//   1. Blink diagnostic LED
+//   2. Log the draw-loop frame rate
+//   3. Stage a draw frame of the sewer light
+//   4. Show all frames 
 void loop(){
   blinkLED(diagnosticLED, 500);
   logFPS(1);
