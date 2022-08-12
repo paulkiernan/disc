@@ -80,6 +80,8 @@ OctoWS2811 octo(
 CTeensy4Controller<BGR, WS2813_800kHz> *pcontroller;
 
 void setup() {
+  delay(500);
+
   Serial.begin(9600);
   Log.begin   (LOG_LEVEL_VERBOSE, &Serial);
   Log.setPrefix(printTimestamp);
@@ -99,7 +101,7 @@ void setup() {
     pcontroller,
     ledarray,
     numPins * ledsPerStrip
-  ).setCorrection(TypicalPixelString);
+  ).setCorrection(TypicalPixelString).setDither(BRIGHTNESS < 255);
   Log.noticeln("OCTOWS2811 and FastLED Initialized!");
 }
 
@@ -129,9 +131,6 @@ uint16_t XYsafe( uint8_t x, uint8_t y){
   return XY(x,y);
 }
 
-void DrawPassingCar(uint16_t ms){
-}
-
 void flicker(std::set<Point> coords){
   int number_flickers = random(2, 6);
   std::map<uint32_t, CRGB> originalColors;
@@ -146,7 +145,7 @@ void flicker(std::set<Point> coords){
 
     FastLED.show();
     int delay_ms = random(50, 100);
-    delay(delay_ms);
+    FastLED.delay(delay_ms);
 
     for (auto itr = coords.begin(); itr != coords.end(); itr++){
       uint16_t index = XYsafe(itr->x, itr->y);
@@ -165,10 +164,10 @@ void DrawOneFrame(){
       CRGB col;
       if (y <= 2) {
         col = CRGB::DarkSlateBlue;
-      } else if (y >= kMatrixHeight - 1) {
-        col = CRGB::PaleVioletRed;
-      } else {
+      } else if (y >= kMatrixHeight - 2) {
         col = CRGB::DarkViolet;
+      } else {
+        col = CRGB::HotPink;
       }
       ledarray[index] = col;
       pixelDefaultColors[index] = col;
@@ -176,7 +175,7 @@ void DrawOneFrame(){
       // Blend in artifacts like ambient streetlamps, etc.
       if (streetLightCoordinates.find({x, y}) != streetLightCoordinates.end()){
         auto existingColor = ledarray[index];
-        ledarray[index] = blend(existingColor, CRGB::DarkGoldenrod, 200);
+        ledarray[index] = blend(existingColor, CRGB::Gold, 200);
       }
     }
   }
