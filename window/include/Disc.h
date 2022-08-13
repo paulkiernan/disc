@@ -4,7 +4,7 @@
 #define USE_OCTOWS2811
 
 #include "Addressing.h"
-#include "DrawingFrame.h"
+#include "Frame.h"
 #include "CTeensy4Controller.h"
 
 #include <OctoWS2811.h>
@@ -38,7 +38,7 @@ class CDisc
         virtual void Show();
 
     private:
-        CDrawingFrame* m_frame = nullptr;
+        CFrame* m_frame = nullptr;
 
     private:
         size_t m_last_indicator = 0;

@@ -21,7 +21,7 @@ uint8_t CPayphoneLight::s_flickers_remaining  = 5;
 bool    CPayphoneLight::s_flicker_high        = false;
 size_t  CPayphoneLight::s_delay_until         = 0;
 
-CPayphoneLight::CPayphoneLight(CDrawingFrame* frame)
+CPayphoneLight::CPayphoneLight(CFrame* frame)
 {
     Log.infoln("CPayphoneLight::CPayphoneLight: Initalizing Geometry");
     p_frame = frame;

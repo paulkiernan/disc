@@ -5,7 +5,7 @@ CGeometry::CGeometry()
 {
 }
 
-CGeometry::CGeometry(CDrawingFrame* frame)
+CGeometry::CGeometry(CFrame* frame)
 {
     Log.infoln("CGeometry::CGeometry: Initializing geometry");
 }

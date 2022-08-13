@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_H_INCLUDED
 #define GEOMETRY_H_INCLUDED
 
-#include "DrawingFrame.h"
+#include "Frame.h"
 
 #include <FastLED.h>
 
@@ -11,7 +11,7 @@
 #include <set>
 #include <tuple>
 
-class CDrawingFrame;
+class CFrame;
 
 class CGeometry
 {
@@ -42,7 +42,7 @@ class CGeometry
 
     public:
         CGeometry();
-        CGeometry(CDrawingFrame* frame);
+        CGeometry(CFrame* frame);
         virtual ~CGeometry();
 
     public:
@@ -50,7 +50,7 @@ class CGeometry
 
     private:
         static std::set<Coordinate> coords; 
-        CDrawingFrame* p_frame;
+        CFrame* p_frame;
 
 };
 

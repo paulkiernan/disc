@@ -1,17 +1,17 @@
-#ifndef DRAWINGFRAME_H_INCLUDED
-#define DRAWINGFRAME_H_INCLUDED
+#ifndef FRAME_H_INCLUDED
+#define FRAME_H_INCLUDED
 
 #include <stddef.h>
 #include <vector>
 
 class CGeometry;
 
-class CDrawingFrame
+class CFrame
 {
     public: // singleton
-        static CDrawingFrame& Instance();
-        CDrawingFrame(const size_t width, const size_t height, struct CRGB* leds);
-        ~CDrawingFrame();
+        static CFrame& Instance();
+        CFrame(const size_t width, const size_t height, struct CRGB* leds);
+        ~CFrame();
 
     public:
         void                    Continue();

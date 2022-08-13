@@ -1,10 +1,10 @@
-#include "DrawingFrame.h"
+#include "Frame.h"
 #include "ColorPalette.h"
 #include "Logging.h"
 
 #include <FastLED.h>
 
-CDrawingFrame::CDrawingFrame(const size_t width, const size_t height, struct CRGB* leds)
+CFrame::CFrame(const size_t width, const size_t height, struct CRGB* leds)
 {
     Log.infoln("CDrawingFrame::CDrawingFrame: Initializing Frame");
     m_grid_width = width;
@@ -21,26 +21,26 @@ CDrawingFrame::CDrawingFrame(const size_t width, const size_t height, struct CRG
     }
 }
 
-CDrawingFrame::~CDrawingFrame()
+CFrame::~CFrame()
 {
     Log.infoln("CDrawingFrame::~CDrawingFrame: Destructing");
 }
 
-void CDrawingFrame::Show()
+void CFrame::Show()
 {
 }
 
-void CDrawingFrame::Delay(size_t ms)
+void CFrame::Delay(size_t ms)
 {
   FastLED.delay(ms);
 }
 
-void CDrawingFrame::SetPixel(size_t index, CRGB rgb)
+void CFrame::SetPixel(size_t index, CRGB rgb)
 {
   p_leds[index] = rgb;
 }
 
-void CDrawingFrame::AddGeometry(CGeometry* geom)
+void CFrame::AddGeometry(CGeometry* geom)
 {
   m_geometries.push_back(geom);
 }
@@ -48,7 +48,7 @@ void CDrawingFrame::AddGeometry(CGeometry* geom)
 // XY(x,y) takes x and y coordinates and returns an LED index number, for use
 // like this:  leds[ XY(x,y) ] == CRGB::Red;
 //     No error checking is performed on the ranges of x and y.
-size_t CDrawingFrame::XY( size_t x, size_t y){
+size_t CFrame::XY( size_t x, size_t y){
   size_t i;
   
   if( y & 0x01) {  // Odd rows run backwards
@@ -65,7 +65,7 @@ size_t CDrawingFrame::XY( size_t x, size_t y){
 // use like this:  leds[ XYSafe(x,y) ] == CRGB::Red;
 //     Error checking IS performed on the ranges of x and y, and an index of
 //     "-1" is returned. 
-size_t CDrawingFrame::XYSafe( size_t x, size_t y){
+size_t CFrame::XYSafe( size_t x, size_t y){
   if( x >= m_grid_width)
   {
     Log.info("got a -1 on the x");
@@ -88,6 +88,6 @@ size_t CDrawingFrame::XYSafe( size_t x, size_t y){
 //
 //     Error checking IS performed on the ranges of x and y, and an index of
 //     "-1" is returned. 
-size_t CDrawingFrame::XYSafeInverted( size_t x, size_t y){
+size_t CFrame::XYSafeInverted( size_t x, size_t y){
   return XYSafe(m_grid_width - x - 1,m_grid_height - y - 1);
 }

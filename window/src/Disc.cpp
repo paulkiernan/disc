@@ -3,10 +3,11 @@
 #include "Addressing.h"
 #include "Arduino.h"
 #include "FreeRam.h"
-#include "DrawingFrame.h"
+#include "Frame.h"
 #include "Geometry.h"
 #include "PayphoneLight.h"
 #include "TrafficLight.h"
+#include "MovingCar.h"
 
 size_t     CDisc::s_iteration = 0;
 DMAMEM int CDisc::s_display_memory[c_leds_per_strip * Addressing::c_num_pins * c_bytes_per_led / 4];
@@ -46,13 +47,14 @@ CDisc::CDisc()
     Log.noticeln("OCTOWS2811 and FastLED Initialized");
 
     // Setup the scene and objects in them
-    m_frame = new CDrawingFrame(
+    m_frame = new CFrame(
         c_leds_per_section, // width
         c_window_height,   // height
         s_leds        // leds
     );
     m_frame->AddGeometry(new CPayphoneLight(m_frame)); 
     m_frame->AddGeometry(new CTrafficLight(m_frame)); 
+    m_frame->AddGeometry(new CMovingCar(m_frame)); 
 
     Log.infoln("CDisc::CDisc: Initial allocations complete, %u byte remaining", FreeRam());
 }

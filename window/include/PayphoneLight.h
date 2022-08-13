@@ -6,14 +6,14 @@
 class CPayphoneLight: public CGeometry
 {
     public:
-        CPayphoneLight(CDrawingFrame* frame);
+        CPayphoneLight(CFrame* frame);
         ~CPayphoneLight();
 
     public:
         virtual void Continue();
 
     private:
-        CDrawingFrame*              p_frame;
+        CFrame*              p_frame;
         static std::set<Coordinate> s_coords; 
         static uint8_t              s_flicker_count; 
         static uint8_t              s_flickers_remaining; 

@@ -6,14 +6,14 @@
 class CTrafficLight: public CGeometry
 {
     public:
-        CTrafficLight(CDrawingFrame* frame);
+        CTrafficLight(CFrame* frame);
         ~CTrafficLight();
 
     public:
         virtual void Continue();
 
     private:
-        CDrawingFrame*              p_frame;
+        CFrame*              p_frame;
         static std::set<Coordinate> s_coords; 
         static bool                 s_stopped;
         static size_t               s_delay_until;

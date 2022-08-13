@@ -10,7 +10,7 @@ std::set<CGeometry::Coordinate> CTrafficLight::s_coords = {
 bool   CTrafficLight::s_stopped      = true;
 size_t CTrafficLight::s_delay_until = 0;
 
-CTrafficLight::CTrafficLight(CDrawingFrame* frame)
+CTrafficLight::CTrafficLight(CFrame* frame)
 {
     Log.infoln("CTrafficLight::CTrafficLight: Initalizing Geometry");
     p_frame = frame;
