@@ -37,6 +37,10 @@ class CGeometry
             inline bool operator <(const Coordinate& that) const {
                 return std::tie(this->x, this->y) < std::tie(that.x, that.y);
             }
+
+            inline bool operator ==(const Coordinate& that) const {
+                return (this->x == that.x) && (this->x == that.x);
+            }
         };
 
 

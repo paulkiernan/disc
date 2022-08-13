@@ -49,8 +49,8 @@ CDisc::CDisc()
     // Setup the scene and objects in them
     m_frame = new CFrame(
         c_leds_per_section, // width
-        c_window_height,   // height
-        s_leds        // leds
+        c_window_height,    // height
+        s_leds              // leds
     );
     m_frame->AddGeometry(new CPayphoneLight(m_frame)); 
     m_frame->AddGeometry(new CTrafficLight(m_frame)); 
