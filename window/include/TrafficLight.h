@@ -16,7 +16,7 @@ class CTrafficLight: public CGeometry
         CDrawingFrame*              p_frame;
         static std::set<Coordinate> s_coords; 
         static bool                 s_stopped;
-        static size_t               s_time_elapsed;
+        static size_t               s_delay_until;
 
 };
 

@@ -16,7 +16,7 @@ CDrawingFrame::CDrawingFrame(const size_t width, const size_t height, struct CRG
       for( size_t x = 0; x < m_grid_width; x++) {
         size_t index = XYSafe(x, y);
 
-        p_leds[index] = ColorPalette::DominantWindowColor;
+        p_leds[index] = ColorPalette::DominantWindow;
       }
     }
 }

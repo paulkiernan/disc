@@ -19,7 +19,6 @@ class CPayphoneLight: public CGeometry
         static uint8_t              s_flickers_remaining; 
         static bool                 s_flicker_high; 
         static size_t               s_delay_until; 
-
 };
 
 #endif

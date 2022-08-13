@@ -8,7 +8,7 @@
 #include "PayphoneLight.h"
 #include "TrafficLight.h"
 
-size_t CDisc::s_iteration = 0;
+size_t     CDisc::s_iteration = 0;
 DMAMEM int CDisc::s_display_memory[c_leds_per_strip * Addressing::c_num_pins * c_bytes_per_led / 4];
 int        CDisc::s_drawing_memory[c_leds_per_strip * Addressing::c_num_pins * c_bytes_per_led / 4];
 CRGB       CDisc::s_leds[Addressing::c_num_pins * c_leds_per_strip];
@@ -90,7 +90,7 @@ void CDisc::Continue()
     {
         last_log = now;
         char logString[128];
-        sprintf(logString, "CDisc::Continue: Frame rate for last 10 seconds is %u", FastLED.getFPS());
+        sprintf(logString, "CDisc::Continue: Frame rate for last 10 seconds is %ufps", FastLED.getFPS());
         Log.infoln(logString);
     }
 

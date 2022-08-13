@@ -41,14 +41,21 @@ void CPayphoneLight::Continue()
         if (!s_flicker_high)
         {
             Log.verboseln(
-                "flickering: remaining (%u), high (%u), count(%u)",
+                "CPayphoneLight::Continue: flickering ON... remaining (%u), high (%u), count(%u)",
                 s_flickers_remaining,
                 s_flicker_high,
                 s_flicker_count
             );
             for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
                 uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
-                p_frame->SetPixel(index, CRGB::Black);
+                p_frame->SetPixel(
+                    index,
+                    blend(
+                        ColorPalette::White,
+                        ColorPalette::PhoneLight,
+                        200 
+                    )
+                );
             }
             s_flicker_high = true;
             s_flicker_count++;
@@ -60,7 +67,7 @@ void CPayphoneLight::Continue()
         {
             size_t remaining = s_delay_until - millis();
             Log.verboseln(
-                "flickering: remaining (%u), high (%u), count(%u), reminaing time (%u)",
+                "CPayphoneLight::Continue: flickering OFF... remaining (%u), high (%u), count(%u), reminaing time (%u)",
                 s_flickers_remaining,
                 s_flicker_high,
                 s_flicker_count,
@@ -71,9 +78,9 @@ void CPayphoneLight::Continue()
                 p_frame->SetPixel(
                     index,
                     blend(
-                        ColorPalette::PhoneLightColor,
-                        ColorPalette::DominantWindowColor,
-                        100
+                        ColorPalette::Black,
+                        ColorPalette::DominantWindow,
+                        200
                     )
                 );
             }
@@ -89,9 +96,24 @@ void CPayphoneLight::Continue()
     }
     else 
     {
-        if (millis() > s_delay_until + 5000)
+        if (millis() > s_delay_until + 30000)
         {
-            s_flickers_remaining = 5;
+            if (random(1000) < 5)
+            {
+                uint8_t num_flickers = random(3, 8);
+                Log.infoln("CPayphoneLight::Continue: Scheduling %u flickers", num_flickers);
+                s_flickers_remaining = num_flickers;
+            }
+        }
+        else 
+        {
+            for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
+                uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
+                p_frame->SetPixel(
+                    index,
+                    ColorPalette::PhoneLight
+                );
+            }
         }
     }
 }

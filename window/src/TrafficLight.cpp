@@ -2,14 +2,13 @@
 #include "Logging.h"
 #include "ColorPalette.h"
 
-bool CTrafficLight::s_stopped = true;
-size_t CTrafficLight::s_time_elapsed = 0;
 std::set<CGeometry::Coordinate> CTrafficLight::s_coords = {
-                      {22, 0}, {23, 0}, {24, 0}, {25, 0}, {26, 0},
-             {21, 1}, {22, 1}, {23, 1}, {24, 1}, {25, 1}, {26, 1},
-    {20, 2}, {21, 2}, {22, 2}, {23, 2}, {24, 2}, {25, 2}, {26, 2},
-                               //{23, 3}, {24, 3}, {25, 3}, {26, 3},
+             {21, 0}, {22, 0}, {23, 0}, {24, 0}, {25, 0}, {26, 0},
+    {20, 1}, {21, 1}, {22, 1}, {23, 1}, {24, 1}, {25, 1}, {26, 1},
+                      {22, 2}, {23, 2}, {24, 2}, {25, 2}, {26, 2},
 };
+bool   CTrafficLight::s_stopped      = true;
+size_t CTrafficLight::s_delay_until = 0;
 
 CTrafficLight::CTrafficLight(CDrawingFrame* frame)
 {
@@ -24,16 +23,41 @@ CTrafficLight::~CTrafficLight()
 
 void CTrafficLight::Continue()
 {
-    //Log.infoln("traffic light doing its thing");
-    for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
-        uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
-        p_frame->SetPixel(
-            index, 
-            blend(
-                ColorPalette::StopLightGoColor,
-                ColorPalette::DominantWindowColor,
-                100
-            )
-        );
+    size_t now = millis();
+
+    if (s_stopped & (now > s_delay_until))
+    {
+        Log.infoln("CTrafficLight::Continue: Switching stoplight to ON");
+        for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
+            size_t index = p_frame->XYSafeInverted(itr->x, itr->y);
+            p_frame->SetPixel(
+                index, 
+                blend(
+                    ColorPalette::StopLightGo,
+                    ColorPalette::DominantWindow,
+                    120
+                )
+            );
+        }
+        s_stopped = false;
+        s_delay_until = now + 60000;
+    }
+
+    if (!s_stopped & (millis() > s_delay_until))
+    {
+        Log.infoln("CTrafficLight::Continue: Switching stoplight to OFF");
+        for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
+            size_t index = p_frame->XYSafeInverted(itr->x, itr->y);
+            p_frame->SetPixel(
+                index, 
+                blend(
+                    ColorPalette::StopLightStop,
+                    ColorPalette::DominantWindow,
+                    120
+                )
+            );
+        }
+        s_stopped = true;
+        s_delay_until = now + 60000;
     }
 }
