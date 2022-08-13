@@ -16,10 +16,10 @@ std::set<CGeometry::Coordinate> CPayphoneLight::s_coords = {
     {0, 10}, {1, 10}, {2, 10}, {3, 10}, {4, 10}, {5, 10}, {6, 10},
     {0, 11}, {1, 11}, {2, 11}, {3, 11}, {4, 11}, {5, 11}, {6, 11}, {7, 11}
 };
-uint8_t CPayphoneLight::s_flickerCount       = 0;
-uint8_t CPayphoneLight::s_flickersRemaining  = 5;
-bool    CPayphoneLight::s_flickerHigh        = false;
-size_t  CPayphoneLight::s_delayUntil         = 0;
+uint8_t CPayphoneLight::s_flicker_count       = 0;
+uint8_t CPayphoneLight::s_flickers_remaining  = 5;
+bool    CPayphoneLight::s_flicker_high        = false;
+size_t  CPayphoneLight::s_delay_until         = 0;
 
 CPayphoneLight::CPayphoneLight(CDrawingFrame* frame)
 {
@@ -34,36 +34,36 @@ CPayphoneLight::~CPayphoneLight()
 
 void CPayphoneLight::Continue()
 {
-    if (s_flickersRemaining > 0)
+    if (s_flickers_remaining > 0)
     {
         // flickerHigh starts low, so here we reset the color to the flicker
         // value when we're in an active flickermode
-        if (!s_flickerHigh)
+        if (!s_flicker_high)
         {
             Log.verboseln(
                 "flickering: remaining (%u), high (%u), count(%u)",
-                s_flickersRemaining,
-                s_flickerHigh,
-                s_flickerCount
+                s_flickers_remaining,
+                s_flicker_high,
+                s_flicker_count
             );
             for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
                 uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
                 p_frame->SetPixel(index, CRGB::Black);
             }
-            s_flickerHigh = true;
-            s_flickerCount++;
-            s_delayUntil = random(50, 100) + millis();
+            s_flicker_high = true;
+            s_flicker_count++;
+            s_delay_until = random(50, 100) + millis();
             FastLED.delay(50);
         }
 
-        if (s_flickerHigh && (millis() > s_delayUntil))
+        if (s_flicker_high && (millis() > s_delay_until))
         {
-            size_t remaining = s_delayUntil - millis();
+            size_t remaining = s_delay_until - millis();
             Log.verboseln(
                 "flickering: remaining (%u), high (%u), count(%u), reminaing time (%u)",
-                s_flickersRemaining,
-                s_flickerHigh,
-                s_flickerCount,
+                s_flickers_remaining,
+                s_flicker_high,
+                s_flicker_count,
                 remaining
             );
             for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
@@ -77,21 +77,21 @@ void CPayphoneLight::Continue()
                     )
                 );
             }
-            s_flickerHigh = false;
-            s_flickerCount++;
+            s_flicker_high = false;
+            s_flicker_count++;
         }
 
-        if (s_flickerCount == 2)
+        if (s_flicker_count == 2)
         {
-            s_flickersRemaining--;
-            s_flickerCount = 0;
+            s_flickers_remaining--;
+            s_flicker_count = 0;
         }
     }
     else 
     {
-        if (millis() > s_delayUntil + 5000)
+        if (millis() > s_delay_until + 5000)
         {
-            s_flickersRemaining = 5;
+            s_flickers_remaining = 5;
         }
     }
 }

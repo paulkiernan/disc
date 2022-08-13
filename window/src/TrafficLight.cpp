@@ -3,7 +3,7 @@
 #include "ColorPalette.h"
 
 bool CTrafficLight::s_stopped = true;
-size_t CTrafficLight::s_timeElapsed = 0;
+size_t CTrafficLight::s_time_elapsed = 0;
 std::set<CGeometry::Coordinate> CTrafficLight::s_coords = {
                       {22, 0}, {23, 0}, {24, 0}, {25, 0}, {26, 0},
              {21, 1}, {22, 1}, {23, 1}, {24, 1}, {25, 1}, {26, 1},

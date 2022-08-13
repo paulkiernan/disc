@@ -7,16 +7,16 @@
 CDrawingFrame::CDrawingFrame(const size_t width, const size_t height, struct CRGB* leds)
 {
     Log.infoln("CDrawingFrame::CDrawingFrame: Initializing Frame");
-    m_gridWidth = width;
-    m_gridHeight = height;
-    p_ledarray = leds;
+    m_grid_width = width;
+    m_grid_height = height;
+    p_leds = leds;
 
     // Draw the backgrouns - but only once
-    for( size_t y = 0; y < m_gridHeight; y++) {
-      for( size_t x = 0; x < m_gridWidth; x++) {
+    for( size_t y = 0; y < m_grid_height; y++) {
+      for( size_t x = 0; x < m_grid_width; x++) {
         size_t index = XYSafe(x, y);
 
-        p_ledarray[index] = ColorPalette::DominantWindowColor;
+        p_leds[index] = ColorPalette::DominantWindowColor;
       }
     }
 }
@@ -37,7 +37,7 @@ void CDrawingFrame::Delay(size_t ms)
 
 void CDrawingFrame::SetPixel(size_t index, CRGB rgb)
 {
-  p_ledarray[index] = rgb;
+  p_leds[index] = rgb;
 }
 
 void CDrawingFrame::AddGeometry(CGeometry* geom)
@@ -52,10 +52,10 @@ size_t CDrawingFrame::XY( size_t x, size_t y){
   size_t i;
   
   if( y & 0x01) {  // Odd rows run backwards
-    size_t reverseX = (m_gridWidth - 1) - x;
-    i = (y * m_gridWidth) + reverseX;
+    size_t reverseX = (m_grid_width - 1) - x;
+    i = (y * m_grid_width) + reverseX;
   } else {         // Even rows run forwards
-    i = (y * m_gridWidth) + x;
+    i = (y * m_grid_width) + x;
   }
 
   return i;
@@ -66,12 +66,12 @@ size_t CDrawingFrame::XY( size_t x, size_t y){
 //     Error checking IS performed on the ranges of x and y, and an index of
 //     "-1" is returned. 
 size_t CDrawingFrame::XYSafe( size_t x, size_t y){
-  if( x >= m_gridWidth)
+  if( x >= m_grid_width)
   {
     Log.info("got a -1 on the x");
     return -1;
   }
-  if( y >= m_gridHeight){
+  if( y >= m_grid_height){
     Log.info("got a -1 on the y");
     return -1;
   }
@@ -89,5 +89,5 @@ size_t CDrawingFrame::XYSafe( size_t x, size_t y){
 //     Error checking IS performed on the ranges of x and y, and an index of
 //     "-1" is returned. 
 size_t CDrawingFrame::XYSafeInverted( size_t x, size_t y){
-  return XYSafe(m_gridWidth - x - 1,m_gridHeight - y - 1);
+  return XYSafe(m_grid_width - x - 1,m_grid_height - y - 1);
 }

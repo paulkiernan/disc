@@ -15,10 +15,10 @@ class CPayphoneLight: public CGeometry
     private:
         CDrawingFrame*              p_frame;
         static std::set<Coordinate> s_coords; 
-        static uint8_t              s_flickerCount; 
-        static uint8_t              s_flickersRemaining; 
-        static bool                 s_flickerHigh; 
-        static size_t               s_delayUntil; 
+        static uint8_t              s_flicker_count; 
+        static uint8_t              s_flickers_remaining; 
+        static bool                 s_flicker_high; 
+        static size_t               s_delay_until; 
 
 };
 

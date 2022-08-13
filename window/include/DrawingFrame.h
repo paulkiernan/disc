@@ -27,9 +27,9 @@ class CDrawingFrame
         std::vector<CGeometry*> GetGeometries() { return m_geometries; }
 
     private:
-        size_t                  m_gridWidth  = -1; 
-        size_t                  m_gridHeight = -1;
-        CRGB*                   p_ledarray;
+        size_t                  m_grid_width  = -1; 
+        size_t                  m_grid_height = -1;
+        CRGB*                   p_leds;
         std::vector<CGeometry*> m_geometries;
 
     private:
