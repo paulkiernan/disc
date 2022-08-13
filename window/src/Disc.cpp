@@ -4,10 +4,10 @@
 #include "Arduino.h"
 #include "FreeRam.h"
 #include "GammaCorrection.h"
-
 #include "DrawingFrame.h"
 #include "Geometry.h"
 #include "PayphoneLight.h"
+#include "TrafficLight.h"
 
 size_t CDisc::s_iteration = 0;
 uint8_t CDisc::c_pinList[c_numPins] = {4, 3, 2};
@@ -52,6 +52,7 @@ CDisc::CDisc()
         s_ledarray        // leds
     );
     m_frame->AddGeometry(new CPayphoneLight(m_frame)); 
+    m_frame->AddGeometry(new CTrafficLight(m_frame)); 
 
     Log.infoln("CDisc::CDisc: Initial allocations complete, %u byte remaining", FreeRam());
 }
@@ -68,6 +69,11 @@ CDisc::~CDisc()
 void CDisc::Show()
 {
     m_frame->Show();
+    for(auto geom : m_frame->GetGeometries()) 
+    {
+        geom->Continue(); 
+    }
+
     FastLED.show();
 }
 
@@ -75,11 +81,6 @@ void CDisc::Continue()
 {
     s_iteration++;
 
-    for(auto geom : m_frame->GetGeometries()) 
-    {
-        geom->Continue(); 
-    }
-    
     Show();
     FastLED.countFPS();
 

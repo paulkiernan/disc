@@ -13,8 +13,12 @@ class CPayphoneLight: public CGeometry
         virtual void Continue();
 
     private:
-        static std::set<Coordinate> coords; 
-        CDrawingFrame* p_frame;
+        CDrawingFrame*              p_frame;
+        static std::set<Coordinate> s_coords; 
+        static uint8_t              s_flickerCount; 
+        static uint8_t              s_flickersRemaining; 
+        static bool                 s_flickerHigh; 
+        static size_t               s_delayUntil; 
 
 };
 

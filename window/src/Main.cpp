@@ -15,20 +15,12 @@
 
 void setup()
 {
-  delay(500);
+  delay(500);  // Wait a bit to boot up, allowing the host computer to ready a
+               // serial connection.
 
   Serial.begin(9600);
-  Log.begin(LOG_LEVEL_VERBOSE, &Serial, true);
+  Log.begin(LOG_LEVEL_TRACE, &Serial, true);
   Log.setPrefix(printTimestamp);
-
-  /*
-  // Translate coordinates 
-  for (auto itr = streetLightCoordinatesHuman.begin(); itr != streetLightCoordinatesHuman.end(); itr++){
-    Point flippedCoord = {kMatrixWidth - itr->x - 1, kMatrixHeight - itr->y -1};
-    streetLightCoordinates.insert(flippedCoord);
-    Log.noticeln("flipped coord: %u, %u", flippedCoord.x, flippedCoord.y);
-  }
-  */
 }
 
 void loop()

@@ -27,13 +27,6 @@ void CDrawingFrame::Show()
       p_ledarray[index] = ColorPalette::DominantWindowColor;
     }
   }
-
-  FastLED.show();
-}
-
-void CDrawingFrame::FastLEDShow()
-{
-  FastLED.show();
 }
 
 void CDrawingFrame::Delay(size_t ms)
@@ -72,8 +65,15 @@ size_t CDrawingFrame::XY( size_t x, size_t y){
 //     Error checking IS performed on the ranges of x and y, and an index of
 //     "-1" is returned. 
 size_t CDrawingFrame::XYSafe( size_t x, size_t y){
-  if( x >= m_gridWidth) return -1;
-  if( y >= m_gridHeight) return -1;
+  if( x >= m_gridWidth)
+  {
+    Log.info("got a -1 on the x");
+    return -1;
+  }
+  if( y >= m_gridHeight){
+    Log.info("got a -1 on the y");
+    return -1;
+  }
   return XY(x,y);
 }
 

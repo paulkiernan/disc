@@ -1,7 +1,7 @@
 #include "PayphoneLight.h"
 #include "Logging.h"
 
-std::set<CGeometry::Coordinate> CPayphoneLight::coords = {
+std::set<CGeometry::Coordinate> CPayphoneLight::s_coords = {
     {0,  0}, {1,  0},
     {0,  1}, {1,  1}, {2,  1},
     {0,  2}, {1,  2}, {2,  2},
@@ -15,6 +15,10 @@ std::set<CGeometry::Coordinate> CPayphoneLight::coords = {
     {0, 10}, {1, 10}, {2, 10}, {3, 10}, {4, 10}, {5, 10}, {6, 10},
     {0, 11}, {1, 11}, {2, 11}, {3, 11}, {4, 11}, {5, 11}, {6, 11}, {7, 11}
 };
+uint8_t CPayphoneLight::s_flickerCount       = 0;
+uint8_t CPayphoneLight::s_flickersRemaining  = 5;
+bool    CPayphoneLight::s_flickerHigh        = false;
+size_t  CPayphoneLight::s_delayUntil         = 0;
 
 CPayphoneLight::CPayphoneLight(CDrawingFrame* frame)
 {
@@ -29,23 +33,57 @@ CPayphoneLight::~CPayphoneLight()
 
 void CPayphoneLight::Continue()
 {
-    int number_flickers = random(2, 6);
-
-    for (int i=0; i < number_flickers; i++) {
-
-        for (auto itr = coords.begin(); itr != coords.end(); itr++){
-            uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
-            p_frame->SetPixel(index, CRGB::Black);
+    if (s_flickersRemaining > 0)
+    {
+        // flickerHigh starts low, so here we reset the color to the flicker
+        // value when we're in an active flickermode
+        if (!s_flickerHigh)
+        {
+            Log.verboseln(
+                "flickering: remaining (%u), high (%u), count(%u)",
+                s_flickersRemaining,
+                s_flickerHigh,
+                s_flickerCount
+            );
+            for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
+                uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
+                p_frame->SetPixel(index, CRGB::Black);
+            }
+            s_flickerHigh = true;
+            s_flickerCount++;
+            s_delayUntil = random(50, 100) + millis();
+            FastLED.delay(50);
         }
 
-        p_frame->FastLEDShow();
-        int delay_ms = random(50, 100);
-        p_frame->Delay(delay_ms);
-
-        for (auto itr = coords.begin(); itr != coords.end(); itr++){
-            uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
-            p_frame->SetPixel(index, CRGB::White);
+        if (s_flickerHigh && (millis() > s_delayUntil))
+        {
+            size_t remaining = s_delayUntil - millis();
+            Log.verboseln(
+                "flickering: remaining (%u), high (%u), count(%u), reminaing time (%u)",
+                s_flickersRemaining,
+                s_flickerHigh,
+                s_flickerCount,
+                remaining
+            );
+            for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
+                uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
+                p_frame->SetPixel(index, CRGB::White);
+            }
+            s_flickerHigh = false;
+            s_flickerCount++;
         }
-        p_frame->FastLEDShow();
+
+        if (s_flickerCount == 2)
+        {
+            s_flickersRemaining--;
+            s_flickerCount = 0;
+        }
+    }
+    else 
+    {
+        if (millis() > s_delayUntil + 5000)
+        {
+            s_flickersRemaining = 5;
+        }
     }
 }
