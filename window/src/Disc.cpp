@@ -2,7 +2,6 @@
 #include "Logging.h"
 #include "Addressing.h"
 #include "Arduino.h"
-#include "ColorPallete.h"
 #include "FreeRam.h"
 #include "GammaCorrection.h"
 
@@ -14,21 +13,17 @@ CRGB       CDisc::s_ledarray[c_numPins * c_ledsPerStrip];
 
 CDisc& CDisc::Instance()
 {
-    static CDisc bixi;
-    return bixi;
+    static CDisc disc;
+    return disc;
 }
 
 CDisc::CDisc()
 {
-    Log.infoln("CDisc::CDisc: Initializing Bixi");
+    Log.infoln("CDisc::CDisc: Initializing Disc");
     pinMode(c_indicatorPin, OUTPUT);
 
     // geometry
     Log.infoln("CDisc::CDisc: Geometry = Grid");
-    /*
-    m_geometry = new CGrid();
-    m_show = new CPixelArray(*m_geometry);
-    */
 
     p_octo = new OctoWS2811(
         c_ledsPerStrip,
@@ -50,6 +45,12 @@ CDisc::CDisc()
 
     GammaCorrection::Init(1.50);
 
+    m_frame = new CDrawingFrame(
+        c_ledsPerSection, // width
+        c_windowHeight,   // height
+        s_ledarray        // leds
+    );
+
     Log.infoln("CDisc::CDisc: Initial allocations complete, %u byte remaining", FreeRam());
 }
 
@@ -59,47 +60,13 @@ CDisc::~CDisc()
 
     ShutDown();
 
-    //delete m_geometry;
+    delete m_frame;
 }
 
 void CDisc::Show()
 {
-  for( size_t y = 0; y < c_kMatrixHeight; y++) {
-    for( size_t x = 0; x < c_kMatrixWidth; x++) {
-      size_t index = XYSafe(x, y);
-
-      // Draw background light 
-      CRGB col = CRGB::DarkSlateBlue;
-      s_ledarray[index] = col;
-    }
-  }
-  FastLED.show();
-}
-
-// XY(x,y) takes x and y coordinates and returns an LED index number, for use
-// like this:  leds[ XY(x,y) ] == CRGB::Red;
-//     No error checking is performed on the ranges of x and y.
-size_t CDisc::XY( size_t x, size_t y){
-  size_t i;
-  
-  if( y & 0x01) {  // Odd rows run backwards
-    size_t reverseX = (c_kMatrixWidth - 1) - x;
-    i = (y * c_kMatrixWidth) + reverseX;
-  } else {         // Even rows run forwards
-    i = (y * c_kMatrixWidth) + x;
-  }
-
-  return i;
-}
-
-// XYsafe(x,y) takes x and y coordinates and returns an LED index number, for
-// use like this:  leds[ XYsafe(x,y) ] == CRGB::Red;
-//     Error checking IS performed on the ranges of x and y, and an index of
-//     "-1" is returned. 
-size_t CDisc::XYSafe( size_t x, size_t y){
-  if( x >= c_kMatrixWidth) return -1;
-  if( y >= c_kMatrixHeight) return -1;
-  return XY(x,y);
+    m_frame->Show();
+    FastLED.show();
 }
 
 void CDisc::Continue()
@@ -108,9 +75,8 @@ void CDisc::Continue()
 
     size_t now = millis();
 
-    //m_geometry->Continue();
+    //m_frame->Continue();
     Show();
-
     FastLED.countFPS();
 
     static size_t last_log = 0;

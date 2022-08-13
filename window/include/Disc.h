@@ -4,10 +4,10 @@
 #define USE_OCTOWS2811
 
 #include "Addressing.h"
+#include "DrawingFrame.h"
 #include "CTeensy4Controller.h"
 
 #include <OctoWS2811.h>
-#include <FastLED.h>
 
 class CDisc
 {
@@ -17,14 +17,15 @@ class CDisc
         static constexpr uint8_t c_indicatorDelayMs = 250;
 
         static constexpr uint8_t c_numPins = 3;
-        static uint8_t c_pinList[c_numPins];
+        static uint8_t   c_pinList[c_numPins];
 
-        static constexpr uint8_t c_ledsPerSection = 27;
+        static constexpr uint8_t c_windowHeight     = 12;
+        static constexpr uint8_t c_ledsPerSection   = 27;
         static constexpr uint8_t c_sectionsPerStrip = 4;
-        static constexpr uint8_t c_bytesPerLED = 4;  // RGBW = one byte per RGB+W
+        static constexpr uint8_t c_bytesPerLED      = 4;  // RGBW = one byte per RGB+W
 
-        static constexpr uint32_t c_ledsPerStrip = c_ledsPerSection * c_sectionsPerStrip;
-        static constexpr uint8_t  c_kMatrixWidth = c_ledsPerSection;
+        static constexpr uint32_t c_ledsPerStrip  = c_ledsPerSection * c_sectionsPerStrip;
+        static constexpr uint8_t  c_kMatrixWidth  = c_ledsPerSection;
         static constexpr uint8_t  c_kMatrixHeight = 12;
 
         //static constexpr size_t c_num_shapes       = 22;
@@ -45,11 +46,8 @@ class CDisc
     public: 
         virtual void Show();
 
-    /*
     private:
-        CPixelArray* m_geometry      = nullptr;
-        CPixelArray* m_show          = nullptr;
-    */
+        CDrawingFrame* m_frame = nullptr;
 
     private:
         size_t m_lastIndicator = 0;
