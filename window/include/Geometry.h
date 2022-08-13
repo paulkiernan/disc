@@ -1,14 +1,19 @@
 #ifndef GEOMETRY_H_INCLUDED
 #define GEOMETRY_H_INCLUDED
 
-#include "FastLED.h"
+#include "DrawingFrame.h"
+
+#include <FastLED.h>
 
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #include <set>
+#include <tuple>
 
-class Geometry
+class CDrawingFrame;
+
+class CGeometry
 {
     public:
         struct Coordinate
@@ -28,19 +33,25 @@ class Geometry
                 y(y_in)
             {
             }
+
+            inline bool operator <(const Coordinate& that) const {
+                return std::tie(this->x, this->y) < std::tie(that.x, that.y);
+            }
         };
 
-    public:
-        Geometry(const char* name, const std::set<Coordinate>);
-        virtual ~Geometry();
 
     public:
-        const char*  GetName() const           { return m_name; }
-        void         SetName(const char* name) { strcpy(m_name, name); }
+        CGeometry();
+        CGeometry(CDrawingFrame* frame);
+        virtual ~CGeometry();
+
+    public:
         virtual void Continue();
 
-    protected:
-        char m_name[32] = {};
+    private:
+        static std::set<Coordinate> coords; 
+        CDrawingFrame* p_frame;
+
 };
 
 #endif

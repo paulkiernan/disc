@@ -5,6 +5,10 @@
 #include "FreeRam.h"
 #include "GammaCorrection.h"
 
+#include "DrawingFrame.h"
+#include "Geometry.h"
+#include "PayphoneLight.h"
+
 size_t CDisc::s_iteration = 0;
 uint8_t CDisc::c_pinList[c_numPins] = {4, 3, 2};
 DMAMEM int CDisc::s_displayMemory[c_ledsPerStrip * c_numPins * c_bytesPerLED / 4];
@@ -22,9 +26,7 @@ CDisc::CDisc()
     Log.infoln("CDisc::CDisc: Initializing Disc");
     pinMode(c_indicatorPin, OUTPUT);
 
-    // geometry
-    Log.infoln("CDisc::CDisc: Geometry = Grid");
-
+    // Setup OctoWS2811 and FastLED
     p_octo = new OctoWS2811(
         c_ledsPerStrip,
         s_displayMemory,
@@ -43,13 +45,13 @@ CDisc::CDisc()
     ).setCorrection(TypicalPixelString).setDither(c_brightness < 255);
     Log.noticeln("OCTOWS2811 and FastLED Initialized!");
 
-    GammaCorrection::Init(1.50);
-
+    // Setup the scene and objects in them
     m_frame = new CDrawingFrame(
         c_ledsPerSection, // width
         c_windowHeight,   // height
         s_ledarray        // leds
     );
+    m_frame->AddGeometry(new CPayphoneLight(m_frame)); 
 
     Log.infoln("CDisc::CDisc: Initial allocations complete, %u byte remaining", FreeRam());
 }
@@ -73,11 +75,16 @@ void CDisc::Continue()
 {
     s_iteration++;
 
-    size_t now = millis();
-
-    //m_frame->Continue();
+    for(auto geom : m_frame->GetGeometries()) 
+    {
+        geom->Continue(); 
+    }
+    
     Show();
     FastLED.countFPS();
+
+    // Diagnostics
+    size_t now = millis();
 
     static size_t last_log = 0;
     if(now - last_log >= 10000)

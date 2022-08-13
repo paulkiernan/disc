@@ -2,6 +2,8 @@
 #include "ColorPalette.h"
 #include "Logging.h"
 
+#include <FastLED.h>
+
 CDrawingFrame::CDrawingFrame(const size_t width, const size_t height, struct CRGB* leds)
 {
     Log.infoln("CDrawingFrame::CDrawingFrame: Initializing Frame");
@@ -22,9 +24,31 @@ void CDrawingFrame::Show()
       size_t index = XYSafe(x, y);
 
       // Draw background light 
-      p_ledarray[index] = CRGB::Red;
+      p_ledarray[index] = ColorPalette::DominantWindowColor;
     }
   }
+
+  FastLED.show();
+}
+
+void CDrawingFrame::FastLEDShow()
+{
+  FastLED.show();
+}
+
+void CDrawingFrame::Delay(size_t ms)
+{
+  FastLED.delay(ms);
+}
+
+void CDrawingFrame::SetPixel(size_t index, CRGB rgb)
+{
+  p_ledarray[index] = rgb;
+}
+
+void CDrawingFrame::AddGeometry(CGeometry* geom)
+{
+  m_geometries.push_back(geom);
 }
 
 // XY(x,y) takes x and y coordinates and returns an LED index number, for use
