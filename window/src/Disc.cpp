@@ -44,7 +44,7 @@ CDisc::CDisc()
     )
     .setCorrection(TypicalPixelString)
     .setDither(c_brightness < 255);
-    Log.noticeln("OCTOWS2811 and FastLED Initialized");
+    Log.noticeln("CDisc::CDisc: OCTOWS2811 and FastLED Initialized");
 
     // Setup the scene and objects in them
     m_frame = new CFrame(
@@ -93,9 +93,7 @@ void CDisc::Continue()
     if(now - last_log >= 10000)
     {
         last_log = now;
-        char logString[128];
-        sprintf(logString, "CDisc::Continue: Frame rate for last 10 seconds is %ufps", FastLED.getFPS());
-        Log.infoln(logString);
+        Log.infoln("CDisc::Continue: FPS: %u, RAM Free: %u", FastLED.getFPS(), FreeRam());
     }
 
     if(now - m_last_indicator >= c_indicator_delay_ms)

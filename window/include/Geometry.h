@@ -18,8 +18,8 @@ class CGeometry
     public:
         struct Coordinate
         {
-            float x = -1.0;
-            float y = -1.0;
+            mutable size_t x = -1;
+            mutable size_t y = -1;
 
             Coordinate() {}
 
@@ -28,7 +28,7 @@ class CGeometry
             {
             }
 
-            Coordinate(float x_in, float y_in) :
+            Coordinate(size_t x_in, size_t y_in) :
                 x(x_in),
                 y(y_in)
             {

@@ -8,6 +8,8 @@ class CMovingCar: public CGeometry
     public:
         CMovingCar(CFrame* frame);
         ~CMovingCar();
+        void GeneratePlacement();
+        void Show();
 
     public:
         virtual void Continue();
@@ -23,8 +25,10 @@ class CMovingCar: public CGeometry
         std::set<Coordinate> m_coords; 
         size_t               m_movement_rate;  
         bool                 m_movement_direction;  
-        size_t               m_min_x;  
-        size_t               m_max_x;  
+        size_t               m_min_x; 
+        size_t               m_max_x; 
+        size_t               m_delay_until;  
+        std::set<Coordinate> m_coordinates_for_removal;  
 };
 
 #endif

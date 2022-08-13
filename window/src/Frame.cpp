@@ -68,11 +68,11 @@ size_t CFrame::XY( size_t x, size_t y){
 size_t CFrame::XYSafe( size_t x, size_t y){
   if( x >= m_grid_width)
   {
-    Log.info("got a -1 on the x");
+    Log.warningln("CFrame::XYSafe: got a -1 on the x (%u)", x);
     return -1;
   }
   if( y >= m_grid_height){
-    Log.info("got a -1 on the y");
+    Log.warningln("CFrame::XYSafe: got a -1 on the y (%u)", y);
     return -1;
   }
   return XY(x,y);
