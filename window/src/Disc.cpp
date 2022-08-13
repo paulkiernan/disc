@@ -24,6 +24,7 @@ CDisc::CDisc()
 {
     Log.infoln("CDisc::CDisc: Initializing Disc");
     pinMode(Addressing::c_indicator_pin, OUTPUT);
+    randomSeed(analogRead(0));
 
     // Setup OctoWS2811 and FastLED
     p_octo = new OctoWS2811(

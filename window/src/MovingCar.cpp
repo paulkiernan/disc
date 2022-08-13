@@ -7,11 +7,7 @@
 CMovingCar::CMovingCar(CFrame* frame)
 {
     Log.infoln("CMovingCar::CMovingCar: Initalizing Geometry");
-
     p_frame = frame;
-    m_movement_rate = random(40, 80);
-    m_movement_direction = random(0, 1);
-
     GeneratePlacement();
 }
 
@@ -21,15 +17,29 @@ void CMovingCar::GeneratePlacement()
     uint8_t starting_top_right_y = random(c_y_boundary_min, c_y_boundary_max);
     for (int8_t y=starting_top_right_y; y<c_y_boundary_max; y++)
     {
-        for (int8_t x=-c_car_width; x<0; x++)
+        int x_start;
+        int x_end;
+        if (m_movement_direction) {
+            x_start = -c_car_width;
+            x_end   = 0;
+        }
+        else
+        {
+            x_start = p_frame->GetGridWidth();
+            x_end   = p_frame->GetGridWidth() + c_car_width;
+        }
+
+        for (int8_t x=x_start; x<x_end; x++)
         {
             Log.verboseln("CMovingCar::GeneratePlacement: Placing car: (%i, %i)", x, y);
             m_coords.insert(Coordinate(x, y));
         }
     }
 
-    m_is_entering = true;
-    m_delay_until = millis() + random(1000, 5000);
+    m_is_entering        = true;
+    m_delay_until        = millis() + random(1000, 5000);
+    m_movement_direction = random(1, 100) > 50;
+    m_movement_rate      = random(20, 60);
 }
 
 CMovingCar::~CMovingCar()
@@ -43,8 +53,8 @@ void CMovingCar::Show()
     for (auto i = m_coords.begin(); i != m_coords.end(); i++)
     {
         if (
-            ( (i->x > 0) && (i->x < p_frame->GetGridWidth() )) && 
-            ( (i->y > 0) && (i->y < p_frame->GetGridHeight()))
+            ( (i->x > 0) && (i->x < (int)p_frame->GetGridWidth() )) && 
+            ( (i->y > 0) && (i->y < (int)p_frame->GetGridHeight()))
         )
         {
             uint16_t index = p_frame->XYSafeInverted(i->x, i->y);
@@ -92,7 +102,11 @@ void CMovingCar::Continue()
     }
 
     // Car has fully entered the scene
-    if (m_min_x > 0)
+    if (m_movement_direction && m_min_x > 0)
+    {
+        m_is_entering = false;
+    }
+    else if (!m_movement_direction && m_max_x < (int)p_frame->GetGridWidth())
     {
         m_is_entering = false;
     }
@@ -102,10 +116,13 @@ void CMovingCar::Continue()
     {
         for (auto i = m_coords.begin(); i != m_coords.end(); i++)
         {
-            if (i->x == m_min_x)
+            if (
+                ((i->x == m_min_x) && m_movement_direction) ||
+                ((i->x == m_max_x) && !m_movement_direction)
+            )
             {
                 // Reset if in frame
-                if (i->x > 0)
+                if (i->x > 0 && i->x < (int)p_frame->GetGridWidth())
                 {
                     p_frame->SetPixel(
                         p_frame->XYSafeInverted(i->x, i->y),
@@ -114,7 +131,14 @@ void CMovingCar::Continue()
                 }
 
                 // Advance
-                i->x += c_car_width;
+                if (m_movement_direction)
+                {
+                    i->x += c_car_width;
+                }
+                else
+                {
+                    i->x -= c_car_width;
+                }
             }
         }
         m_delay_until = now + m_movement_rate; 
