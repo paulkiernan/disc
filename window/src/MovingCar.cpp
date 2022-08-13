@@ -23,7 +23,7 @@ void CMovingCar::GeneratePlacement()
     {
         for (int8_t x=-c_car_width; x<0; x++)
         {
-            Log.traceln("CMovingCar::GeneratePlacement: Placing car: (%i, %i)", x, y);
+            Log.verboseln("CMovingCar::GeneratePlacement: Placing car: (%i, %i)", x, y);
             m_coords.insert(Coordinate(x, y));
         }
     }
@@ -70,7 +70,7 @@ void CMovingCar::Continue()
     if (m_coordinates_for_removal.size() > 0)
     {
         for (auto i = m_coordinates_for_removal.begin(); i != m_coordinates_for_removal.end(); i++){
-            Log.traceln("CMovingCar::Continue: Removing Coordinate: (x: %i, y: %i)", i->x, i->y);
+            Log.verboseln("CMovingCar::Continue: Removing Coordinate: (x: %i, y: %i)", i->x, i->y);
             m_coords.erase(Coordinate(i->x, i->y));
         }
         m_coordinates_for_removal.clear();
@@ -97,18 +97,21 @@ void CMovingCar::Continue()
         m_is_entering = false;
     }
 
-    // Advance if delay has been met
+    // Advance
     if ((m_coords.size()) > 0 && (now > m_delay_until))
     {
         for (auto i = m_coords.begin(); i != m_coords.end(); i++)
         {
             if (i->x == m_min_x)
             {
-                // Reset color
-                p_frame->SetPixel(
-                    p_frame->XYSafeInverted(i->x, i->y),
-                    ColorPalette::DominantWindow
-                );
+                // Reset if in frame
+                if (i->x > 0)
+                {
+                    p_frame->SetPixel(
+                        p_frame->XYSafeInverted(i->x, i->y),
+                        ColorPalette::DominantWindow
+                    );
+                }
 
                 // Advance
                 i->x += c_car_width;
