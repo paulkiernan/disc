@@ -1,15 +1,14 @@
 #include "TrafficLight.h"
 #include "Logging.h"
+#include "ColorPalette.h"
 
 bool CTrafficLight::s_stopped = true;
 size_t CTrafficLight::s_timeElapsed = 0;
 std::set<CGeometry::Coordinate> CTrafficLight::s_coords = {
-    {15,  1}, {16,  1}, {17,  1}, {18,  1}, {19,  1}, {20,  1},
-    {15,  2}, {16,  2}, {17,  2}, {18,  2}, {19,  2}, {20,  2},
-    {15,  3}, {16,  3}, {17,  3}, {18,  3}, {19,  3}, {20,  3},
-    {15,  4}, {16,  4}, {17,  4}, {18,  4}, {19,  4}, {20,  4},
-    {15,  5}, {16,  5}, {17,  5}, {18,  5}, {19,  5}, {20,  5},
-    {15,  6}, {16,  6}, {17,  6}, {18,  6}, {19,  6}, {20,  6}
+                      {22, 0}, {23, 0}, {24, 0}, {25, 0}, {26, 0},
+             {21, 1}, {22, 1}, {23, 1}, {24, 1}, {25, 1}, {26, 1},
+    {20, 2}, {21, 2}, {22, 2}, {23, 2}, {24, 2}, {25, 2}, {26, 2},
+                               //{23, 3}, {24, 3}, {25, 3}, {26, 3},
 };
 
 CTrafficLight::CTrafficLight(CDrawingFrame* frame)
@@ -28,6 +27,13 @@ void CTrafficLight::Continue()
     //Log.infoln("traffic light doing its thing");
     for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
         uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
-        p_frame->SetPixel(index, CRGB::Black);
+        p_frame->SetPixel(
+            index, 
+            blend(
+                ColorPalette::StopLightGoColor,
+                ColorPalette::DominantWindowColor,
+                100
+            )
+        );
     }
 }

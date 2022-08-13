@@ -1,5 +1,6 @@
 #include "PayphoneLight.h"
 #include "Logging.h"
+#include "ColorPalette.h"
 
 std::set<CGeometry::Coordinate> CPayphoneLight::s_coords = {
     {0,  0}, {1,  0},
@@ -67,7 +68,14 @@ void CPayphoneLight::Continue()
             );
             for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
                 uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
-                p_frame->SetPixel(index, CRGB::White);
+                p_frame->SetPixel(
+                    index,
+                    blend(
+                        ColorPalette::PhoneLightColor,
+                        ColorPalette::DominantWindowColor,
+                        100
+                    )
+                );
             }
             s_flickerHigh = false;
             s_flickerCount++;

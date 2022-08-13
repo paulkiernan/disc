@@ -8,17 +8,13 @@ namespace ColorPalette
     enum Color : uint32_t
     {
         DominantWindowColor = CRGB::HotPink,
-        BottomWindowAccent  = CRGB::White,
-        TopWindowAccent     = CRGB::White,
-        PhoneLight          = CRGB::White, 
+        BottomWindowAccent  = CRGB::DarkViolet,
+        TopWindowAccent     = CRGB::DarkSlateBlue,
+        PhoneLightColor     = CRGB::Gold, 
+        StopLightGoColor    = CRGB::Green,
+        StopLightStopColor  = CRGB::Red,
     };
 
-    constexpr Color s_colors[4] = { 
-        DominantWindowColor,
-        BottomWindowAccent,
-        TopWindowAccent,
-        PhoneLight
-    };
 };
 
 #endif
