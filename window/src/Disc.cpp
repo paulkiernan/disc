@@ -40,8 +40,10 @@ CDisc::CDisc()
         p_controller,
         s_leds,
         Addressing::c_num_pins * c_leds_per_strip
-    ).setCorrection(TypicalPixelString).setDither(c_brightness < 255);
-    Log.noticeln("OCTOWS2811 and FastLED Initialized!");
+    )
+    .setCorrection(TypicalPixelString)
+    .setDither(c_brightness < 255);
+    Log.noticeln("OCTOWS2811 and FastLED Initialized");
 
     // Setup the scene and objects in them
     m_frame = new CDrawingFrame(

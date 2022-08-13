@@ -27,7 +27,7 @@ void CTrafficLight::Continue()
 
     if (s_stopped & (now > s_delay_until))
     {
-        Log.infoln("CTrafficLight::Continue: Switching stoplight to ON");
+        Log.verboseln("CTrafficLight::Continue: Switching stoplight to ON");
         for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
             size_t index = p_frame->XYSafeInverted(itr->x, itr->y);
             p_frame->SetPixel(
@@ -45,7 +45,7 @@ void CTrafficLight::Continue()
 
     if (!s_stopped & (millis() > s_delay_until))
     {
-        Log.infoln("CTrafficLight::Continue: Switching stoplight to OFF");
+        Log.verboseln("CTrafficLight::Continue: Switching stoplight to OFF");
         for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
             size_t index = p_frame->XYSafeInverted(itr->x, itr->y);
             p_frame->SetPixel(

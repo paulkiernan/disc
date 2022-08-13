@@ -101,7 +101,7 @@ void CPayphoneLight::Continue()
             if (random(1000) < 5)
             {
                 uint8_t num_flickers = random(3, 8);
-                Log.infoln("CPayphoneLight::Continue: Scheduling %u flickers", num_flickers);
+                Log.verboseln("CPayphoneLight::Continue: Scheduling %u flickers", num_flickers);
                 s_flickers_remaining = num_flickers;
             }
         }
