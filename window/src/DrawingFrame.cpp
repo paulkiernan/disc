@@ -10,6 +10,15 @@ CDrawingFrame::CDrawingFrame(const size_t width, const size_t height, struct CRG
     m_gridWidth = width;
     m_gridHeight = height;
     p_ledarray = leds;
+
+    // Draw the backgrouns - but only once
+    for( size_t y = 0; y < m_gridHeight; y++) {
+      for( size_t x = 0; x < m_gridWidth; x++) {
+        size_t index = XYSafe(x, y);
+
+        p_ledarray[index] = ColorPalette::DominantWindowColor;
+      }
+    }
 }
 
 CDrawingFrame::~CDrawingFrame()
@@ -19,14 +28,6 @@ CDrawingFrame::~CDrawingFrame()
 
 void CDrawingFrame::Show()
 {
-  for( size_t y = 0; y < m_gridHeight; y++) {
-    for( size_t x = 0; x < m_gridWidth; x++) {
-      size_t index = XYSafe(x, y);
-
-      // Draw background light 
-      p_ledarray[index] = ColorPalette::DominantWindowColor;
-    }
-  }
 }
 
 void CDrawingFrame::Delay(size_t ms)
