@@ -67,12 +67,26 @@ size_t CDrawingFrame::XY( size_t x, size_t y){
   return i;
 }
 
-// XYsafe(x,y) takes x and y coordinates and returns an LED index number, for
-// use like this:  leds[ XYsafe(x,y) ] == CRGB::Red;
+// XYSafe(x,y) takes x and y coordinates and returns an LED index number, for
+// use like this:  leds[ XYSafe(x,y) ] == CRGB::Red;
 //     Error checking IS performed on the ranges of x and y, and an index of
 //     "-1" is returned. 
 size_t CDrawingFrame::XYSafe( size_t x, size_t y){
   if( x >= m_gridWidth) return -1;
   if( y >= m_gridHeight) return -1;
   return XY(x,y);
+}
+
+// XYSafeInverted(x,y) takes x and y coordinates and returns an LED index
+// number, for use like this:  leds[ XYSafeInverted(x,y) ] == CRGB::Red;
+//
+// This function exists alongside the XYSafe(x, y) function simply because the 
+// the X/Y orientation of the window we're trying to draw on is inverted and
+// it's much easier for a human to reason about a coordinate system starting
+// from (0, 0) vs ANYTHING else.
+//
+//     Error checking IS performed on the ranges of x and y, and an index of
+//     "-1" is returned. 
+size_t CDrawingFrame::XYSafeInverted( size_t x, size_t y){
+  return XYSafe(m_gridWidth - x - 1,m_gridHeight - y - 1);
 }

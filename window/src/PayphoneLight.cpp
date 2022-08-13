@@ -34,7 +34,7 @@ void CPayphoneLight::Continue()
     for (int i=0; i < number_flickers; i++) {
 
         for (auto itr = coords.begin(); itr != coords.end(); itr++){
-            uint16_t index = p_frame->XYSafe(itr->x, itr->y);
+            uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
             p_frame->SetPixel(index, CRGB::Black);
         }
 
@@ -43,7 +43,7 @@ void CPayphoneLight::Continue()
         p_frame->Delay(delay_ms);
 
         for (auto itr = coords.begin(); itr != coords.end(); itr++){
-            uint16_t index = p_frame->XYSafe(itr->x, itr->y);
+            uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
             p_frame->SetPixel(index, CRGB::White);
         }
         p_frame->FastLEDShow();
