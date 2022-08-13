@@ -2,6 +2,7 @@
 #include "Logging.h"
 #include "ColorPalette.h"
 
+#include <limits.h> 
 
 CMovingCar::CMovingCar(CFrame* frame)
 {
@@ -10,7 +11,6 @@ CMovingCar::CMovingCar(CFrame* frame)
     p_frame = frame;
     m_movement_rate = random(40, 80);
     m_movement_direction = random(0, 1);
-    m_delay_until = millis() + random(1000, 5000);
 
     GeneratePlacement();
 }
@@ -19,14 +19,17 @@ void CMovingCar::GeneratePlacement()
 {
     // Generate bounded-random placement
     uint8_t starting_top_right_y = random(c_y_boundary_min, c_y_boundary_max);
-    for (uint8_t y=starting_top_right_y; y<c_y_boundary_max; y++)
+    for (int8_t y=starting_top_right_y; y<c_y_boundary_max; y++)
     {
-        for (uint8_t x=0; x<(c_car_width+1); x++)
+        for (int8_t x=-c_car_width; x<0; x++)
         {
-            Log.verboseln("CMovingCar::GeneratePlacement: Placing car: (%u, %u)", x, y);
+            Log.traceln("CMovingCar::GeneratePlacement: Placing car: (%i, %i)", x, y);
             m_coords.insert(Coordinate(x, y));
         }
     }
+
+    m_is_entering = true;
+    m_delay_until = millis() + random(1000, 5000);
 }
 
 CMovingCar::~CMovingCar()
@@ -39,7 +42,10 @@ void CMovingCar::Show()
     // Draw car position
     for (auto i = m_coords.begin(); i != m_coords.end(); i++)
     {
-        if ((i->x < p_frame->GetGridWidth()) && (i->y < p_frame->GetGridHeight()))
+        if (
+            ( (i->x > 0) && (i->x < p_frame->GetGridWidth() )) && 
+            ( (i->y > 0) && (i->y < p_frame->GetGridHeight()))
+        )
         {
             uint16_t index = p_frame->XYSafeInverted(i->x, i->y);
             p_frame->SetPixel(
@@ -47,8 +53,11 @@ void CMovingCar::Show()
                 ColorPalette::Black 
             );
         }
-        else{
-            m_coordinates_for_removal.insert(Coordinate(i->x, i->y));
+        else {
+            if (!m_is_entering)
+            {
+                m_coordinates_for_removal.insert(Coordinate(i->x, i->y));
+            }
         }
     }
 }
@@ -61,14 +70,15 @@ void CMovingCar::Continue()
     if (m_coordinates_for_removal.size() > 0)
     {
         for (auto i = m_coordinates_for_removal.begin(); i != m_coordinates_for_removal.end(); i++){
-            Log.verboseln("CMovingCar::Continue: Removing Coordinate: (x: %u, y: %u)", i->x, i->y);
+            Log.traceln("CMovingCar::Continue: Removing Coordinate: (x: %i, y: %i)", i->x, i->y);
             m_coords.erase(Coordinate(i->x, i->y));
         }
+        m_coordinates_for_removal.clear();
     }
 
     // Find boundaries of car
-    m_max_x = 0;
-    m_min_x = SIZE_MAX;
+    m_max_x = INT_MIN;
+    m_min_x = INT_MAX;
     for (auto i = m_coords.begin(); i != m_coords.end(); i++)
     {
         if (i->x > m_max_x)
@@ -79,6 +89,12 @@ void CMovingCar::Continue()
         {
             m_min_x = i->x;
         }
+    }
+
+    // Car has fully entered the scene
+    if (m_min_x > 0)
+    {
+        m_is_entering = false;
     }
 
     // Advance if delay has been met
