@@ -3,7 +3,6 @@
 #include "Addressing.h"
 #include "Arduino.h"
 #include "FreeRam.h"
-#include "GammaCorrection.h"
 #include "DrawingFrame.h"
 #include "Geometry.h"
 #include "PayphoneLight.h"
@@ -32,7 +31,7 @@ CDisc::CDisc()
         s_drawing_memory,
         WS2811_RGB | WS2813_800kHz,
         Addressing::c_num_pins,
-        Addressing::c_pinList
+        Addressing::c_pin_list
     );
     p_octo->begin();
     p_controller = new CTeensy4Controller<BGR, WS2813_800kHz>(p_octo);

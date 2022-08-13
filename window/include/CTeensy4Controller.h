@@ -8,11 +8,11 @@ template <EOrder RGB_ORDER = RGB,
           uint8_t CHIP = WS2811_800kHz>
 class CTeensy4Controller : public CPixelLEDController<RGB_ORDER, 8, 0xFF>
 {
-    OctoWS2811 *pocto;
+    OctoWS2811 *p_octo;
 
 public:
-    CTeensy4Controller(OctoWS2811 *_pocto)
-        : pocto(_pocto){};
+    CTeensy4Controller(OctoWS2811 *_p_octo)
+        : p_octo(_p_octo){};
 
     virtual void init() {}
     virtual void showPixels(PixelController<RGB_ORDER, 8, 0xFF> &pixels)
@@ -24,12 +24,12 @@ public:
             uint8_t r = pixels.loadAndScale0();
             uint8_t g = pixels.loadAndScale1();
             uint8_t b = pixels.loadAndScale2();
-            pocto->setPixel(i++, r, g, b);
+            p_octo->setPixel(i++, r, g, b);
             pixels.stepDithering();
             pixels.advanceData();
         }
 
-        pocto->show();
+        p_octo->show();
     }
 };
 
