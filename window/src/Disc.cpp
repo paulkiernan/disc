@@ -57,7 +57,7 @@ CDisc::CDisc()
     m_frame->AddGeometry(new CTrafficLight(m_frame)); 
     m_frame->AddGeometry(new CMovingCar(m_frame)); 
 
-    Log.infoln("CDisc::CDisc: Initial allocations complete, %u byte remaining", FreeRam());
+    Log.infoln("CDisc::CDisc: Initial allocations complete, %u bytes of RAM remaining", freeram());
 }
 
 CDisc::~CDisc()
@@ -94,7 +94,7 @@ void CDisc::Continue()
     if(now - last_log >= 10000)
     {
         last_log = now;
-        Log.infoln("CDisc::Continue: FPS: %u, RAM Free: %u", FastLED.getFPS(), FreeRam());
+        Log.infoln("CDisc::Continue: FPS: %u, RAM Free: %u", FastLED.getFPS(), freeram());
     }
 
     if(now - m_last_indicator >= c_indicator_delay_ms)
