@@ -60,7 +60,6 @@ void CPayphoneLight::Continue()
             s_flicker_high = true;
             s_flicker_count++;
             s_delay_until = random(50, 100) + millis();
-            FastLED.delay(50);
         }
 
         if (s_flicker_high && (millis() > s_delay_until))
@@ -111,7 +110,11 @@ void CPayphoneLight::Continue()
                 uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
                 p_frame->SetPixel(
                     index,
-                    ColorPalette::PhoneLight
+                    blend(
+                        ColorPalette::PhoneLight,
+                        ColorPalette::DominantWindow,
+                        150 
+                    )
                 );
             }
         }

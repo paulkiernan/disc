@@ -10,7 +10,7 @@ namespace ColorPalette
         DominantWindow     = CRGB::HotPink,
         BottomWindowAccent = CRGB::DarkViolet,
         TopWindowAccent    = CRGB::DarkSlateBlue,
-        PhoneLight         = CRGB::DarkGoldenrod, 
+        PhoneLight         = CRGB::WhiteSmoke, 
         StopLightGo        = CRGB::Green,
         StopLightStop      = CRGB::Red,
         Black              = CRGB::Black,

@@ -17,7 +17,7 @@ class CMovingCar: public CGeometry
     private:
         static constexpr uint8_t c_y_boundary_min = 4;
         static constexpr uint8_t c_y_boundary_max = 12;
-        static constexpr uint8_t c_car_width      = 8;
+        static constexpr uint8_t c_car_width      = 12;
         static constexpr uint8_t c_car_height     = 4;
 
     private:
