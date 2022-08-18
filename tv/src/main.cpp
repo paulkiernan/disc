@@ -167,7 +167,7 @@ void draw()
     drawTheMan();
     if (lastMillis - lastSceneSwitch > 120000)
     {
-      scene += 1;
+      scene++;
       lastSceneSwitch = lastMillis;
       textIndex = random(0, numTexts);
     }
@@ -176,13 +176,25 @@ void draw()
     drawBigSkull();
     if (lastMillis - lastSceneSwitch > 30000)
     {
-      scene += 1;
+      scene++;
       lastSceneSwitch = lastMillis;
       textIndex = random(0, numTexts);
     }
   }
   else if (scene == 2) {
     drawDragon();
+    if (lastMillis - lastSceneSwitch > 30000)
+    {
+      scene++;
+      lastSceneSwitch = lastMillis;
+      textIndex = random(0, numTexts);
+    }
+  }
+  else if (scene == 4) {
+    graphics.setCursor(40, 50);
+    graphics.print("FUCK YOUR");
+    graphics.setCursor(90, 70);
+    graphics.print("BURN");
     if (lastMillis - lastSceneSwitch > 30000)
     {
       scene = 0;
