@@ -58,12 +58,13 @@ Mesh<CompositeGraphics> theManModel(
 const int fontWidth = 20;
 const int fontHeight = 20;
 Font<CompositeGraphics> font(fontWidth, fontHeight, arcadefont::pixels);
-const int numTexts = 4; 
+const int numTexts = 5; 
 char *messages[numTexts] = {
   "CURFEW:00:00",
   " LOADING...",
   "RADIATION:          HIGH",
   "WEATHER:           DUSTY",
+  "POWER GRID:      OFFLINE",
 };
 
 void compositeCore(void *data)
@@ -154,7 +155,7 @@ void draw()
   static int lastMillis = 0;
   static int scene = 0;
   static int lastSceneSwitch = millis();
-  static int textIndex = 1;
+  static int textIndex = random(0, numTexts);
 
   int t = millis();
   int fps = 1000 / (t - lastMillis);
