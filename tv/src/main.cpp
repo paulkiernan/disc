@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <esp_pm.h>
 #include <soc/rtc.h>
+#include<string.h>
 
 #include "Matrix.h"
 #include "CompositeGraphics.h"
@@ -57,9 +58,12 @@ Mesh<CompositeGraphics> theManModel(
 const int fontWidth = 20;
 const int fontHeight = 20;
 Font<CompositeGraphics> font(fontWidth, fontHeight, arcadefont::pixels);
-char *messages[2] = {
+const int numTexts = 4; 
+char *messages[numTexts] = {
   "CURFEW:00:00",
-  " LOADING..."
+  " LOADING...",
+  "RADIATION:          HIGH",
+  "WEATHER:           DUSTY",
 };
 
 void compositeCore(void *data)
@@ -151,7 +155,6 @@ void draw()
   static int scene = 0;
   static int lastSceneSwitch = millis();
   static int textIndex = 1;
-  static int numTexts = 2; 
 
   int t = millis();
   int fps = 1000 / (t - lastMillis);
@@ -187,8 +190,9 @@ void draw()
     }
   }
   graphics.setTextColor(25);
-  graphics.setCursor(1, YRES-(fontHeight+2));
-  graphics.print(messages[textIndex]);
+  char* msg = messages[textIndex];
+  graphics.setCursor(1, YRES-(((((strlen(msg)-1)/12))*fontHeight)+2+fontHeight));
+  graphics.print(msg);
   /*
   graphics.print("free memory: ");
   graphics.print((int)heap_caps_get_free_size(MALLOC_CAP_DEFAULT));
