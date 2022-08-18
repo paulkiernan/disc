@@ -190,7 +190,7 @@ void draw()
       textIndex = random(0, numTexts);
     }
   }
-  else if (scene == 4) {
+  else if (scene == 3) {
     graphics.setCursor(40, 50);
     graphics.print("FUCK YOUR");
     graphics.setCursor(90, 70);
