@@ -3,11 +3,10 @@
 <head>
   <link rel="stylesheet" href="{{ url_for('.static', filename='css/main.css') }}">;
   <title>INFORMATION SUPERHIGHWAY</title>
-  <style type="TEXT/css">BODY, a:hover {
-    cursor: url(http://cur.cursors-4u.net/special/spe-1/spe51.ani),
-    url(http://cur.cursors-4u.net/special/spe-1/spe51.png),
-    progress !important;
-  }</style><A HREF="http://www.cursors-4u.com/cursor/2006/04/17/spe51.html" TARGET="_blank" TITLE="Electro"><IMG SRC="http://cur.cursors-4u.net/cursor.png" BORDER="0" alt="Electro" style="position:absolute; top: 0px; right: 0px;" /></a>
+  <script src=" {{ url_for('.static', filename='js/browser.js') }}"></script>
+  <script>
+    new cursoreffects.ghostCursor();
+  </script>
 </head>
 
 <body BACKGROUND="{{ url_for('.static', filename='images/bgstars.gif') }}">
