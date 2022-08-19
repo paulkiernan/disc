@@ -58,13 +58,18 @@ Mesh<CompositeGraphics> theManModel(
 const int fontWidth = 20;
 const int fontHeight = 20;
 Font<CompositeGraphics> font(fontWidth, fontHeight, arcadefont::pixels);
-const int numTexts = 5; 
+const int numTexts = 10; 
 char *messages[numTexts] = {
   "CURFEW:00:00",
   " LOADING...",
   "RADIATION:          HIGH",
   "WEATHER:           DUSTY",
   "POWER GRID:      OFFLINE",
+  " MOOD: SEXY",
+  "  TV: BAD",
+  "KNEES: HURT",
+  " YEAR: 1999",
+  "CONNECTION:         LOST",
 };
 
 void compositeCore(void *data)
@@ -162,44 +167,30 @@ void draw()
   lastMillis = t;
 
   graphics.begin(0);
-  if (scene == 0)
+  switch(scene % 4)
   {
-    drawTheMan();
-    if (lastMillis - lastSceneSwitch > 120000)
+    case 0:
     {
-      scene++;
-      lastSceneSwitch = lastMillis;
-      textIndex = random(0, numTexts);
+      drawTheMan();
+      break;
     }
-  }
-  else if (scene == 1) {
-    drawBigSkull();
-    if (lastMillis - lastSceneSwitch > 30000)
+    case 1:
     {
-      scene++;
-      lastSceneSwitch = lastMillis;
-      textIndex = random(0, numTexts);
+      drawBigSkull();
+      break;
     }
-  }
-  else if (scene == 2) {
-    drawDragon();
-    if (lastMillis - lastSceneSwitch > 30000)
+    case 2:
     {
-      scene++;
-      lastSceneSwitch = lastMillis;
-      textIndex = random(0, numTexts);
+      drawDragon();
+      break;
     }
-  }
-  else if (scene == 3) {
-    graphics.setCursor(40, 50);
-    graphics.print("FUCK YOUR");
-    graphics.setCursor(90, 70);
-    graphics.print("BURN");
-    if (lastMillis - lastSceneSwitch > 30000)
+    case 3:
     {
-      scene = 0;
-      lastSceneSwitch = lastMillis;
-      textIndex = random(0, numTexts);
+      graphics.setCursor(40, 50);
+      graphics.print("FUCK YOUR");
+      graphics.setCursor(90, 70);
+      graphics.print("BURN");
+      break;
     }
   }
   graphics.setTextColor(25);
@@ -215,6 +206,14 @@ void draw()
   graphics.print(fps * model.triangleCount);
   */
   graphics.end();
+
+  // Rotate text and scene
+  if (lastMillis - lastSceneSwitch > 60000)
+  {
+    scene++;
+    lastSceneSwitch = lastMillis;
+    textIndex = random(0, numTexts);
+  }
 }
 
 void loop()
