@@ -66,7 +66,7 @@ char *messages[numTexts] = {
   "WEATHER:           DUSTY",
   "POWER GRID:      OFFLINE",
   " MOOD: SEXY",
-  " TV: BAD",
+  "  TV: BAD",
   "KNEES: HURT",
   " YEAR: 1999",
   "CONNECTION:         LOST",
