@@ -1,0 +1,22 @@
+from flask import abort
+from flask import redirect
+from flask import render_template
+from flask import request
+
+from disc_web.models import Guestlog
+from disc_web.ext.database import db
+
+
+def index():
+    logs = Guestlog.query.order_by(Guestlog.time_created.desc()).all()
+    return render_template('index.html', logs=logs)
+
+
+def api_guestbook():
+    log = Guestlog(
+        name=request.form['author'],
+        content=request.form['content']
+    )
+    db.session.add(log)
+    db.session.commit()
+    return redirect('/')
