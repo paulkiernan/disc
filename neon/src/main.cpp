@@ -1,18 +1,11 @@
 #include "FastLED.h"
 
 // How many leds in your strip?
-#define NUM_LEDS 300
-#define MAX_BRIGHTNESS 50
+#define NUM_LEDS 200
+#define MAX_BRIGHTNESS 255
 #define STEP_BRIGHTNESS 128
 
-#define LED_STRIP_N 2
-#define LED_STRIP_O 14
-#define LED_STRIP_W 7
-#define LED_STRIP_H 8
-#define LED_STRIP_E1 6
-#define LED_STRIP_R 20
-#define LED_STRIP_E2 21
-#define LED_STRIP_AUX 5
+#define LED_STRIP_AUX 8
 
 #define LED_PIN 13
 #define CHIPSET        WS2813
@@ -94,6 +87,8 @@ void flicker(int start_index, int end_index, CRGB* leds)
 }
 
 void setup() {
+
+  pinMode(LED_PIN, OUTPUT);
   pinMode(LED_STRIP_AUX, OUTPUT);
   FastLED.addLeds<CHIPSET, LED_STRIP_AUX, COLOR_ORDER>(
           led_strip_AUX,
@@ -101,19 +96,20 @@ void setup() {
   ).setCorrection(TypicalSMD5050);
 
   // Initialize with color
-  int newColor = random (0, colorArraySize);
-  for (int strip = 0; strip < ledStripSize; strip++){
-      for(int dot = 0; dot < NUM_LEDS; dot++) { 
-        led_strip_AUX[dot] = 0x777700;
-      }
-      FastLED.setBrightness(MAX_BRIGHTNESS);
+  for(int dot = 0; dot < NUM_LEDS; dot++) { 
+    led_strip_AUX[dot] = 0x777700;
   }
+  FastLED.setBrightness(MAX_BRIGHTNESS);
   FastLED.show();
 }
 
 void loop() {
+    for(int dot = 0; dot < NUM_LEDS; dot++) { 
+        led_strip_AUX[dot] = 0x777700;
+    }
     digitalWrite(LED_PIN, HIGH);   // set the LED on
     delay(period);                  // wait for a second
     digitalWrite(LED_PIN, LOW);    // set the LED off
     delay(period);
+    FastLED.show();
 }
