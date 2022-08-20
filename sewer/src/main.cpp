@@ -1,4 +1,4 @@
-/*  OctoWS2811 + FastLED Teensy LC Sewer Controller 
+/*  OctoWS2812 + FastLED Teensy LC Sewer Controller 
 
   Required Connections
   --------------------
