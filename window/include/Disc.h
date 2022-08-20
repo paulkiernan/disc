@@ -12,7 +12,7 @@
 class CDisc
 {
     public:
-        static constexpr uint8_t c_brightness         = 255;
+        static constexpr uint8_t c_brightness         = 100;
         static constexpr uint8_t c_indicator_delay_ms = 250;
 
         static constexpr uint8_t  c_window_height      = 12;
