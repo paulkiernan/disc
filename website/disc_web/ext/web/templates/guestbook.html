@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/main.css') }}">;
+  <title>INFORMATION SUPERHIGHWAY</title>
+  <script src=" {{ url_for('.static', filename='js/browser.js') }}"></script>
+  <script>
+    new cursoreffects.ghostCursor();
+  </script>
+</head>
+
+<body BACKGROUND="{{ url_for('.static', filename='images/bgstars.gif') }}">
+
+  <center>
+    <IMG SRC="{{ url_for('.static', filename='images/warnsign.gif') }}">
+    <IMG SRC="{{ url_for('.static', filename='images/ledsign.gif') }}">
+    <IMG SRC="{{ url_for('.static', filename='images/warnsign.gif') }}">
+
+    <TABLE>
+      <TBODY>
+        <TR>
+          <TD>
+            <IMG SRC="{{ url_for('.static', filename='images/Goku3Kame.gif') }}">
+          </TD>
+          <TD>
+            <IMG SRC="{{ url_for('.static', filename='images/computer-01.gif') }}">
+          </TD>
+          <TD>
+            <IMG SRC="{{ url_for('.static', filename='images/flip.gif') }}">
+          </TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </center>
+
+  <div id="guestbook">
+    <marquee><h1 style="font-family: "=>Sign Our Guestbook!!!</h1></marquee>
+    <form method=POST action=/guestbook>
+      <input type=text name=author placeholder=Name></input><br />
+      <textarea name=content value=Name placeholder=Message></textarea><br />
+      <input type=submit value=Post></input><br />
+    </form>
+  </div>
+
+  <div class="entries-list">
+    {% for log in logs %}
+      <div class="entry">
+        <div class="top-row">
+          <span class="name">{{ log.name }}</span>
+          <span class="time">{{ log.time_created }}</span>
+        </div>
+        <div class="content-body">{{ log.content}}</div>
+      </div>
+    {% endfor %}
+  </div>
+
+</body>
+</html>

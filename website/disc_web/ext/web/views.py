@@ -8,8 +8,12 @@ from disc_web.ext.database import db
 
 
 def index():
+    return render_template('index.html')
+
+
+def guestbook():
     logs = Guestlog.query.order_by(Guestlog.time_created.desc()).all()
-    return render_template('index.html', logs=logs)
+    return render_template('guestbook.html', logs=logs)
 
 
 def api_guestbook():
@@ -19,4 +23,4 @@ def api_guestbook():
     )
     db.session.add(log)
     db.session.commit()
-    return redirect('/')
+    return redirect('/guestbook.html')

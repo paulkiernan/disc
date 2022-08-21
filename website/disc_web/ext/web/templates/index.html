@@ -1,58 +1,128 @@
-<!doctype html>
 <html>
-<head>
-  <link rel="stylesheet" href="{{ url_for('.static', filename='css/main.css') }}">;
-  <title>INFORMATION SUPERHIGHWAY</title>
-  <script src=" {{ url_for('.static', filename='js/browser.js') }}"></script>
-  <script>
-    new cursoreffects.ghostCursor();
-  </script>
-</head>
+  <head>
+    <style>
+      * {
+        margin: 0;
+        padding:0;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-rendering: geometricPrecision;
+        zoom: 1.4;
+      }
 
-<body BACKGROUND="{{ url_for('.static', filename='images/bgstars.gif') }}">
+      #connection {
+        height: 275px;
+        width: 420px;
+        border: solid 1px black;
+        background: #fffff7;
+        text-align: center;
+      }
+      #connect {
+        margin: 0 auto;
+        width: 98px;
+        height: 20px;
+        border: solid 1px black;
+        background: #006bac;
+        color: #fffdff;
+        font-weight: bold;
+        font-family: arial;
+        font-size: 12px;
+        text-align: center;
+        line-height: 20px;
+        box-shadow: 5px 6px #ada3a4;
+        cursor: pointer;
+      }
+      .connecting {
+        opacity: 0.5;
+      }
 
-  <center>
-    <IMG SRC="{{ url_for('.static', filename='images/warnsign.gif') }}">
-    <IMG SRC="{{ url_for('.static', filename='images/ledsign.gif') }}">
-    <IMG SRC="{{ url_for('.static', filename='images/warnsign.gif') }}">
+      ul {
+        width: 95%;
+        height: 142px;
+        text-align: center;
+        margin: 10px auto -10px;
+      }
 
-    <TABLE>
-      <TBODY>
-        <TR>
-          <TD>
-            <IMG SRC="{{ url_for('.static', filename='images/Goku3Kame.gif') }}">
-          </TD>
-          <TD>
-            <IMG SRC="{{ url_for('.static', filename='images/computer-01.gif') }}">
-          </TD>
-          <TD>
-            <IMG SRC="{{ url_for('.static', filename='images/flip.gif') }}">
-          </TD>
-        </TR>
-      </TBODY>
-    </TABLE>
-  </center>
+      li {
+        display: inline-block;
+        width : 30%;
+        border: solid 3px #003362;
+        background: #cecfff;
+        height: 73%;
+      }
 
-  <div id="guestbook">
-    <marquee><h1 style="font-family: "=>Sign Our Guestbook!!!</h1></marquee>
-    <form method=POST action=/guestbook>
-      <input type=text name=author placeholder=Name></input><br />
-      <textarea name=content value=Name placeholder=Message></textarea><br />
-      <input type=submit value=Post></input><br />
-    </form>
-  </div>
+      #connection > ul.one > li:nth-child(1) {
+        background: #cecfff url("{{ url_for('.static', filename='images/one-brc.png') }}") center center no-repeat;
+        background-size: 60%;
+      }
 
-  <div class="entries-list">
-    {% for log in logs %}
-      <div class="entry">
-        <div class="top-row">
-          <span class="name">{{ log.name }}</span>
-          <span class="time">{{ log.time_created }}</span>
-        </div>
-        <div class="content-body">{{ log.content}}</div>
-      </div>
-    {% endfor %}
-  </div>
+      #connection > ul.two > li:nth-child(2) {
+        background: #cecfff url("{{ url_for('.static', filename='images/two-brc.png') }}") center center no-repeat;
+        background-size: 80%;
+      }
 
-</body>
+      #connection > ul.three > li:nth-child(3) {
+        background: #cecfff url("{{ url_for('.static', filename='images/three.png') }}") center center no-repeat;
+        background-size: 90%;
+     }
+      #header span {
+        background: rgb(204, 204, 204);
+        padding: 0 10px;
+      }
+
+      #header {
+        background: #cecece url("{{ url_for('.static', filename='images/menu.png') }}");
+        border: solid 1px #fffff7;
+        border-bottom: solid 1px #000;
+        font-family: monospace;
+        font-weight: bold;
+        text-rendering: geometricPrecision;
+        font-size: 11px;
+        background-size: 4px;
+        background-repeat: repeat-x;
+        background-position: center top;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='connection'>
+      <div id="header"><span>Connect to Black Rock City Online</span></div>
+      <img
+        border: solid 1px #fffff7;
+        src="{{ url_for('.static', filename='images/logo-brc.png') }}"
+        height="80px"
+        alt="logo"
+      >
+      <ul class='connect-list'>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <div id='connect' onClick='connect()'>Connect</div>
+    </div>
+    <script>
+      function connect() {
+        var elm = document.querySelector('#connect');
+
+        elm.classList.add('connecting');
+        elm.innerHTML = 'Connecting..';
+
+        (new Audio('{{ url_for(".static", filename="media/dialup.mp3") }}')).play();
+
+        setTimeout(function() {
+          (document.querySelector('.connect-list')).classList.add('two');
+        }, 1000 * 10);
+        setTimeout(function() {
+          (document.querySelector('.connect-list')).classList.add('three');
+        }, 1000 * 25);
+        setTimeout(function() {
+          window.location.href = '/guestbook.html';
+        }, 1000 * 27);
+        (document.querySelector('.connect-list')).classList.add('one');
+      }
+    </script>
+  </body>
 </html>
