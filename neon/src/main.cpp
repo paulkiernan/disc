@@ -93,6 +93,7 @@ void flicker(int start_index, int end_index, CRGB* leds)
         for (int j=start_index; j < end_index; j++) {
             leds[j] = 0x000000;
         }
+        colorCorrectDifferentStrips(led_strip_AUX);
         FastLED.show();
         int delay_ms = random(50, 100);
         delay(delay_ms);
@@ -105,8 +106,10 @@ void flicker(int start_index, int end_index, CRGB* leds)
                 original_colour_b
             );
         }
+        colorCorrectDifferentStrips(led_strip_AUX);
         FastLED.show();
     }
+    delay(period);
 }
 
 
@@ -123,18 +126,45 @@ void setup()
   for(int dot = 0; dot < NUM_LEDS; dot++) {
         led_strip_AUX[dot] = CRGB::Red;
   }
+  colorCorrectDifferentStrips(led_strip_AUX);
   FastLED.setBrightness(MAX_BRIGHTNESS);
   FastLED.show();
 }
 
 void loop() {
-    for(int dot = 0; dot < NUM_LEDS; dot++) {
-            led_strip_AUX[dot] = CRGB::Red;
+  static int lastChange = millis();
+  static int colorIndex = 0;
+
+  if (millis() - lastChange > period * 5)
+  {
+    Serial.print("Setting color index: ");
+    Serial.println(colorIndex, DEC);
+    for(int dot = 0; dot < NUM_LEDS; dot++)
+    {
+      led_strip_AUX[dot] = colors[colorIndex]; 
     }
     colorCorrectDifferentStrips(led_strip_AUX);
-    digitalWrite(LED_PIN, HIGH);   // set the LED on
-    delay(period);                  // wait for a second
-    digitalWrite(LED_PIN, LOW);    // set the LED off
-    delay(period);
-    FastLED.show();
+    lastChange = millis();
+    colorIndex++;
+    if (colorIndex > sizeof colors / sizeof colors[0])
+    {
+      colorIndex = 0;
+    }
+  }
+
+  long random_100 = random(100);
+  if (random_100 <= 20)
+  {
+    flicker(
+      0,
+      20,
+      led_strip_AUX
+    );
+  }
+  
+  digitalWrite(LED_PIN, HIGH);   // set the LED on
+  delay(period);                  // wait for a second
+  digitalWrite(LED_PIN, LOW);    // set the LED off
+  delay(period);
+  FastLED.show();
 }
