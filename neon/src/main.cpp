@@ -1,22 +1,22 @@
-#include "FastLED.h"
+#include <FastLED.h>
 
-// How many leds in your strip?
-#define NUM_LEDS 200
-#define MAX_BRIGHTNESS 255
-#define STEP_BRIGHTNESS 128
+#define NUM_LEDS 290
+#define MAX_BRIGHTNESS 150
 
-#define LED_STRIP_AUX 8
-
+#define LED_STRIP_AUX 2
 #define LED_PIN 13
+
 #define CHIPSET        WS2813
 #define COLOR_ORDER    GRB
 
-int period = 1000;
+constexpr uint16_t period = 1000;
+constexpr uint16_t DIFFERENT_LED_START_INDEX_0 = 112;
+constexpr uint16_t DIFFERENT_LED_END_INDEX_0 = DIFFERENT_LED_START_INDEX_0 + 55;
+constexpr uint16_t DIFFERENT_LED_START_INDEX_1 = 196;
+constexpr uint16_t DIFFERENT_LED_END_INDEX_1 = DIFFERENT_LED_START_INDEX_1 + 51;
 CRGB led_strip_AUX[NUM_LEDS];
 
 // Define the array of leds
-
-int ledStripSize = 7;
 int colors[] = {
   CRGB::Amethyst,
   CRGB::Brown,
@@ -54,7 +54,30 @@ int colors[] = {
   CRGB::Plum,
   CRGB::LightGoldenrodYellow
 };
-int colorArraySize = sizeof(colors) / sizeof(int);
+
+void colorCorrectDifferentStrips(CRGB* leds)
+{
+  for(int dot = DIFFERENT_LED_START_INDEX_0; dot < DIFFERENT_LED_END_INDEX_0; dot++) {
+    int original_colour_r = leds[dot].r;
+    int original_colour_g = leds[dot].g;
+    int original_colour_b = leds[dot].b;
+    leds[dot].setRGB(
+        original_colour_g,
+        original_colour_r,
+        original_colour_b
+    );
+  }
+  for(int dot = DIFFERENT_LED_START_INDEX_1; dot < DIFFERENT_LED_END_INDEX_1; dot++) {
+    int original_colour_r = leds[dot].r;
+    int original_colour_g = leds[dot].g;
+    int original_colour_b = leds[dot].b;
+    leds[dot].setRGB(
+        original_colour_g,
+        original_colour_r,
+        original_colour_b
+    );
+  }
+}
 
 void flicker(int start_index, int end_index, CRGB* leds)
 {
@@ -86,27 +109,29 @@ void flicker(int start_index, int end_index, CRGB* leds)
     }
 }
 
-void setup() {
 
+void setup()
+{
   pinMode(LED_PIN, OUTPUT);
   pinMode(LED_STRIP_AUX, OUTPUT);
   FastLED.addLeds<CHIPSET, LED_STRIP_AUX, COLOR_ORDER>(
-          led_strip_AUX,
-          NUM_LEDS
+    led_strip_AUX,
+    NUM_LEDS
   ).setCorrection(TypicalSMD5050);
 
   // Initialize with color
-  for(int dot = 0; dot < NUM_LEDS; dot++) { 
-    led_strip_AUX[dot] = 0x777700;
+  for(int dot = 0; dot < NUM_LEDS; dot++) {
+        led_strip_AUX[dot] = CRGB::Red;
   }
   FastLED.setBrightness(MAX_BRIGHTNESS);
   FastLED.show();
 }
 
 void loop() {
-    for(int dot = 0; dot < NUM_LEDS; dot++) { 
-        led_strip_AUX[dot] = 0x777700;
+    for(int dot = 0; dot < NUM_LEDS; dot++) {
+            led_strip_AUX[dot] = CRGB::Red;
     }
+    colorCorrectDifferentStrips(led_strip_AUX);
     digitalWrite(LED_PIN, HIGH);   // set the LED on
     delay(period);                  // wait for a second
     digitalWrite(LED_PIN, LOW);    // set the LED off
