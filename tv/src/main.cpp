@@ -160,6 +160,7 @@ void draw()
   static int lastMillis = 0;
   static int scene = 0;
   static int lastSceneSwitch = millis();
+  static int lastMessageSwitch = millis();
   static int textIndex = random(0, numTexts);
 
   int t = millis();
@@ -207,12 +208,18 @@ void draw()
   */
   graphics.end();
 
-  // Rotate text and scene
+  // Rotate scene
   if (lastMillis - lastSceneSwitch > 60000)
   {
     scene++;
     lastSceneSwitch = lastMillis;
+  }
+
+  // Rotate text
+  if (lastMillis - lastMessageSwitch > 30000)
+  {
     textIndex = random(0, numTexts);
+    lastMessageSwitch = lastMillis;
   }
 }
 
