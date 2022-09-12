@@ -37,7 +37,7 @@
 #define NUM_PINS 8 
 #define LOG_LEVEL LOG_LEVEL_VERBOSE
 
-const uint8_t actualLEDsPerStrip = 19;
+const uint8_t actualLEDsPerStrip = 29;
 const uint8_t ledsPerStrip = actualLEDsPerStrip + 1;
 const uint8_t bytesPerLED = 3;  // RGB = one byte per RGB
 const uint8_t diagnosticLED = LED_BUILTIN; 
