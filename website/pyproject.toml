@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "disc-web"
+version = "1.0.0"
+description = "Putting the Disco back in \"Disconnect from Reality\""
+authors = ["Paul Kiernan <hi@paulynomial.com>"]
+readme = "README.md"
+packages = [{include = "disc_web"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^2.3.2"
+Flask-Admin = "^1.6.1"
+Flask-SQLAlchemy = "^3.0.5"
+dynaconf = "^3.2.0"
+click = "^8.1.6"
+Flask-RESTful = "^0.3.10"
+gunicorn = "^21.2.0"
+
+[tool.poetry.group.dev.dependencies]
+ipdb = "^0.13.13"
+pytest-flask = "^1.2.0"
+python-dotenv = "^1.0.0"
+flask-shell-ipython = "^0.5.1"
+Flask-DebugToolbar = "^0.13.1"
+pytest = "^7.4.0"
+coverage = "^7.2.7"
+flake8 = "^6.1.0"
+black = "^23.7.0"
+isort = "^5.12.0"
+pytest-cov = "^4.1.0"
+codecov = "^2.1.13"
+mypy = "^1.4.1"
+gitchangelog = "^3.0.4"
+mkdocs = "^1.5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
