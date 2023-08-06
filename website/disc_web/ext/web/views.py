@@ -24,3 +24,6 @@ def api_guestbook():
     db.session.add(log)
     db.session.commit()
     return redirect('/guestbook.html')
+
+def egggame():
+    return render_template('egggame.html')
