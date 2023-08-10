@@ -1,6 +1,6 @@
 [default]
 DEBUG = true
-SQLALCHEMY_DATABASE_URI = 'sqlite:////Users/paul/workspace/github.com/paulkiernan/disc/website/disc_web/disc.test.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///disc.test.db'
 TITLE = "test_disc"
 SECRET_KEY = "Pl3453Ch4ng3"
 PASSWORD_SCHEMES = ['pbkdf2_sha512', 'md5_crypt']
@@ -36,4 +36,4 @@ DEBUG_TB_PANELS = [
 
 [production]
 DEBUG = false
-SQLALCHEMY_DATABASE_URI = 'sqlite:///disc.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:////usr/src/app/disc.db'
