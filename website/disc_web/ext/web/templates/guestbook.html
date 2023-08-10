@@ -19,7 +19,18 @@
             <IMG SRC="{{ url_for('.static', filename='images/Goku3Kame.gif') }}">
           </TD>
           <TD>
-            <IMG SRC="{{ url_for('.static', filename='images/computer-01.gif') }}">
+  <div id="guestbook">
+    <marquee direction="down" width="500" height="200" behavior="alternate">
+      <marquee behavior="alternate">
+        <h1>Sign Our Guestbook!!!</h1>
+      </marquee>
+    </marquee>
+    <form method=POST action=/guestbook>
+      <input type=text name=author placeholder=Name></input><br />
+      <textarea name=content value=Name placeholder=Message></textarea><br />
+      <input type=submit value=Post></input><br />
+    </form>
+  </div>
           </TD>
           <TD>
             <IMG SRC="{{ url_for('.static', filename='images/flip.gif') }}">
@@ -29,14 +40,6 @@
     </TABLE>
   </center>
 
-  <div id="guestbook">
-    <marquee><h1>Sign Our Guestbook!!!</h1></marquee>
-    <form method=POST action=/guestbook>
-      <input type=text name=author placeholder=Name></input><br />
-      <textarea name=content value=Name placeholder=Message></textarea><br />
-      <input type=submit value=Post></input><br />
-    </form>
-  </div>
 
   <div class="entries-list">
     {% for log in logs %}
