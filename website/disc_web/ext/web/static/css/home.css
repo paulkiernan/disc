@@ -1,0 +1,76 @@
+* {
+  font-family: "Comic Sans MS", sans-serif
+}
+
+html, body {
+  background-image: url('/cgi_bin/static/images/bgstars.gif');
+  background-color: #000;
+  height: 100%;
+}
+
+.center{
+  text-align: center;
+}
+
+.title {
+  font-size: 30px;
+  color: magenta;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: yellow;
+}
+
+#nav {
+  padding: 0;
+  margin: 2px;
+  width: 205px;
+  border: 1px solid #000;
+}
+
+#main-page {
+  padding: 0;
+  margin: 2px;
+  width: 100%;
+  border: 1px solid #000;
+}
+
+.blink {
+  -webkit-animation: blink .85s linear infinite;
+  -moz-animation: blink .85s linear infinite;
+  -ms-animation: blink .85s linear infinite;
+  -o-animation: blink .85s linear infinite;
+   animation: blink .85s linear infinite;
+}
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@-moz-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@-ms-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@-o-keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 1; }
+    50.01% { opacity: 0; }
+    100% { opacity: 0; }
+}
+

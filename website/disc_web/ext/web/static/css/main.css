@@ -1,19 +1,18 @@
-@font-face {
-  font-family: comicCartoon;
-  src: url('/cgi_bin/static/fonts/ComicsCarToon.ttf');
-}
-
 * {
-  font-family: courier;
-  font-size: large;
+  font-family: "Comic Sans MS", sans-serif;
 }
 
-body {
+html, body {
   background-image: url('/cgi_bin/static/images/bgstars.gif');
   background-color: #000;
+  height: 100%;
 }
 
-h1 {
+.center{
+  text-align: center;
+}
+
+.guestbook h1 {
   font-family: cursive;
   font-size: 30px;
 }

@@ -5,17 +5,13 @@
   <title>INFORMATION SUPERHIGHWAY</title>
   <script src=" {{ url_for('.static', filename='js/browser.js') }}"></script>
   <script>
-    new cursoreffects.ghostCursor();
+    new cursoreffects.ghostCursor()
   </script>
 </head>
 
 <body BACKGROUND="{{ url_for('.static', filename='images/bgstars.gif') }}">
 
   <center>
-    <IMG SRC="{{ url_for('.static', filename='images/warnsign.gif') }}">
-    <IMG SRC="{{ url_for('.static', filename='images/ledsign.gif') }}">
-    <IMG SRC="{{ url_for('.static', filename='images/warnsign.gif') }}">
-
     <TABLE>
       <TBODY>
         <TR>
@@ -34,7 +30,7 @@
   </center>
 
   <div id="guestbook">
-    <marquee><h1 style="font-family: "=>Sign Our Guestbook!!!</h1></marquee>
+    <marquee><h1>Sign Our Guestbook!!!</h1></marquee>
     <form method=POST action=/guestbook>
       <input type=text name=author placeholder=Name></input><br />
       <textarea name=content value=Name placeholder=Message></textarea><br />
