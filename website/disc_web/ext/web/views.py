@@ -5,6 +5,7 @@ from flask import request
 
 from disc_web.models import Guestlog
 from disc_web.models import Reservation
+from disc_web.models import ReservationChangelog
 from disc_web.ext.database import db
 
 
@@ -37,9 +38,16 @@ def bait():
     return render_template('bait.html', reservation=reservation)
 
 def api_bait_reservation():
+    content = request.form['editordata']
+
+    changelog = ReservationChangelog(content=content)
+    db.session.add(changelog)
+
     reservation = Reservation.query.one()
-    reservation.content = request.form['editordata']
+    reservation.content = content
     db.session.add(reservation)
+
     db.session.commit()
+
     return redirect('/bait.html')
 
