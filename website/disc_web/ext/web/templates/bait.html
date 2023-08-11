@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{ url_for('.static', filename='css/bait.css') }}">;
+  <title>Ramshackle Bait and Tackle Reservations</title>
+  <script src=" {{ url_for('.static', filename='js/browser.js') }}"></script>
+  <script>
+    new cursoreffects.ghostCursor()
+  </script>
+  <link href="{{ url_for('.static', filename='summernote/bootstrap.min.css') }}" rel="stylesheet">
+  <script src="{{ url_for('.static', filename='summernote/jquery-3.5.1.min.js') }}"></script>
+  <script src="{{ url_for('.static', filename='summernote/bootstrap.min.js') }}"></script>
+
+  <!-- include summernote css/js -->
+  <link href="{{ url_for('.static', filename='summernote/summernote.min.css') }}" rel="stylesheet">
+  <script src="{{ url_for('.static', filename='summernote/summernote.min.js') }}"></script>
+</head>
+
+<body>
+
+  <center>
+    <TABLE>
+      <TBODY>
+        <TR>
+          <TD>
+            <IMG style="width:200px;" SRC="{{ url_for('.static', filename='images/ramshackle/fish-swim.gif') }}">
+          </TD>
+          <TD>
+            <marquee direction="down" width="500" height="200" behavior="alternate">
+              <marquee behavior="alternate">
+  <h1>Ramshackle Bait and Tackle Reservation System</h1>
+              </marquee>
+            </marquee>
+          </div>
+          </TD>
+          <TD>
+            <IMG style="width:200px;" SRC="{{ url_for('.static', filename='images/ramshackle/fish-swim.gif') }}">
+          </TD>
+        </TR>
+      </TBODY>
+    </TABLE>
+  </center>
+
+  <form style="margin: 0 auto; width: 80%;" method="post">
+      <div class='form-group'>
+        {# note we use same name for Save and Cancel buttons, but a different value #}
+        <button type="submit" name="submit" value="submit" class="btn btn-info">Save</button>
+        <button type="cancel" name="submit" value="cancel" class="btn btn-secondary">Cancel</button>
+      </div>
+    <div class='form-group'>
+      <textarea id="summernote" name="editordata" class='form-control'>{{reservation.content}}</textarea>
+      <script>
+      $('#summernote').summernote({
+        placeholder: 'Enter some content here.',
+        tabsize: 2,
+        height: 500,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['fontname', ['fontname']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+        ]
+      });
+    </script>
+    </div>
+  </form>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+* {
+  font-family: "Comic Sans MS", sans-serif;
+}
+
+html, body {
+  background-image: url('/cgi_bin/static/images/ramshackle/fish.gif');
+  background-color: #000;
+  height: 100%;
+}
+
+.center{
+  text-align: center;
+}
+
+.guestbook h1 {
+  font-family: cursive;
+  font-size: 30px;
+}
+
+#guestbook,
+#guestlogs {
+  padding: 20px;
+  background-color: #fff;
+  margin: auto;
+  width: 500px;
+}
+
+#guestbook input,
+#guestbook textarea {
+  padding: 0;
+  margin: 2px;
+  height: 2em;
+  width: 100%;
+  border: 1px solid #000;
+}
+
+#guestbook textarea {
+  height: 5em;
+}
+
+.entries-list {
+  margin-top: 40px;
+  padding: 0 40px;
+}
+
+.entries-list .entry{
+  margin-bottom: 20px;
+  border: 2px solid #fff;
+  background-color: #fff;
+}
+
+.entries-list .entry .top-row{
+  background-color: #ae56ff;
+  width: auto;
+  clear: both;
+}
+
+.entries-list .entry .top-row .name{
+  padding: 100px 100px;
+}
+
+.entries-list .entry .top-row .name{
+  padding: 4px 8px;
+  font-weight: 900;
+  font-size: larger;
+}
+
+.entries-list .entry .top-row .time{
+    float: right;
+}
+
+.entries-list .entry .content-body{
+  padding: 5px 10px 5px 10px;
+}

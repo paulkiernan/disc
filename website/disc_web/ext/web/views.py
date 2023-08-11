@@ -4,6 +4,7 @@ from flask import render_template
 from flask import request
 
 from disc_web.models import Guestlog
+from disc_web.models import Reservation
 from disc_web.ext.database import db
 
 
@@ -30,3 +31,15 @@ def egggame():
 
 def home():
     return render_template('home.html')
+
+def bait():
+    reservation = Reservation.query.one()
+    return render_template('bait.html', reservation=reservation)
+
+def api_bait_reservation():
+    reservation = Reservation.query.one()
+    reservation.content = request.form['editordata']
+    db.session.add(reservation)
+    db.session.commit()
+    return redirect('/bait.html')
+

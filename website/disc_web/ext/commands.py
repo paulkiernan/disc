@@ -3,6 +3,7 @@ import click
 from disc_web.ext.database import db
 
 from disc_web.models import Guestlog
+from disc_web.models import Reservation
 
 
 def create_db():
@@ -20,6 +21,7 @@ def populate_db():
     data = [
         Guestlog(id=1, name="Bonk", content="Fuck yer burn"),
         Guestlog(id=2, name="Meow", content="Hey, that's not nice."),
+        Reservation(id=1, content="Hi my name is Team Player and I'd like a chef's tasting menu at Ramshackle Bait and Tackle for my dog's birthday tonight at 8pm. Fuck yer burn.")
     ]
     db.session.bulk_save_objects(data)
     db.session.commit()
