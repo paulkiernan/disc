@@ -22,14 +22,14 @@ class CMovingCar: public CGeometry
 
     private:
         CFrame*              p_frame;
-        std::set<Coordinate> m_coords; 
-        size_t               m_movement_rate;  
-        bool                 m_movement_direction;  
-        int                  m_min_x; 
-        int                  m_max_x; 
-        size_t               m_delay_until;  
-        std::set<Coordinate> m_coordinates_for_removal;  
-        bool                 m_is_entering;  
+        std::set<Coordinate> m_coords;
+        size_t               m_movement_rate;
+        bool                 m_movement_direction;
+        int                  m_min_x;
+        int                  m_max_x;
+        size_t               m_delay_until;
+        std::set<Coordinate> m_coordinates_for_removal;
+        bool                 m_is_entering;
 };
 
 #endif

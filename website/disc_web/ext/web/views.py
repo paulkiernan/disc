@@ -10,35 +10,36 @@ from disc_web.ext.database import db
 
 
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
 def guestbook():
     logs = Guestlog.query.order_by(Guestlog.time_created.desc()).all()
-    return render_template('guestbook.html', logs=logs)
+    return render_template("guestbook.html", logs=logs)
 
 
 def api_guestbook():
-    log = Guestlog(
-        name=request.form['author'],
-        content=request.form['content']
-    )
+    log = Guestlog(name=request.form["author"], content=request.form["content"])
     db.session.add(log)
     db.session.commit()
-    return redirect('/guestbook.html')
+    return redirect("/guestbook.html")
+
 
 def egggame():
-    return render_template('egggame.html')
+    return render_template("egggame.html")
+
 
 def home():
-    return render_template('home.html')
+    return render_template("home.html")
+
 
 def bait():
     reservation = Reservation.query.one()
-    return render_template('bait.html', reservation=reservation)
+    return render_template("bait.html", reservation=reservation)
+
 
 def api_bait_reservation():
-    content = request.form['editordata']
+    content = request.form["editordata"]
 
     changelog = ReservationChangelog(content=content)
     db.session.add(changelog)
@@ -49,5 +50,4 @@ def api_bait_reservation():
 
     db.session.commit()
 
-    return redirect('/bait.html')
-
+    return redirect("/bait.html")

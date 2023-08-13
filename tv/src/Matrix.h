@@ -5,10 +5,10 @@ class Vector
 {
   public:
   float v[4];
-  
+
   Vector(float x = 0, float y = 0, float z = 0, float w = 1)
   {
-    v[0] = x; 
+    v[0] = x;
     v[1] = y;
     v[2] = z;
     v[3] = w;
@@ -35,7 +35,7 @@ class Matrix
 {
   public:
   float m[4][4];
-  
+
   Matrix()
     :Matrix(1, 0, 0, 0,  0, 1, 0 ,0,  0, 0, 1, 0, 0, 0, 0, 1)
   {
@@ -51,27 +51,27 @@ class Matrix
     m[2][0] = m20; m[2][1] = m21; m[2][2] = m22; m[2][3] = m23;
     m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
   }
-  
+
   static Matrix identity()
   {
     return Matrix(1, 0, 0, 0,  0, 1, 0 ,0,  0, 0, 1, 0, 0, 0, 0, 1);
   }
-  
+
   static Matrix scaling(float s)
   {
     return Matrix(s, 0, 0, 0,  0, s, 0 ,0,  0, 0, s, 0, 0, 0, 0, 1);
   }
-  
+
   static Matrix scaling(float u, float v, float w)
   {
     return Matrix(u, 0, 0, 0,  0, v, 0 ,0,  0, 0, w, 0, 0, 0, 0, 1);
   }
-  
+
   static Matrix translation(float x, float y, float z)
   {
     return Matrix(1, 0, 0, x,  0, 1, 0, y,  0, 0, 1, z, 0, 0, 0, 1);
   }
-    
+
   static Matrix rotation(float a, float x, float y, float z)
   {
     float cosa = cos(a);
@@ -93,7 +93,7 @@ class Matrix
       0, scale, 0, 0,
       0, 0, -far * near / (far - near), 0,
       0, 0, -1, 0
-      );    
+      );
   }
 
   Vector operator *(const Vector &v)
@@ -111,7 +111,7 @@ class Matrix
     Matrix mr;
     for(int y = 0; y < 4; y++)
         for(int x = 0; x < 4; x++)
-          mr.m[y][x] = m[y][0] * m2.m[0][x] + m[y][1] * m2.m[1][x] + m[y][2] * m2.m[2][x] + m[y][3] * m2.m[3][x];   
+          mr.m[y][x] = m[y][0] * m2.m[0][x] + m[y][1] * m2.m[1][x] + m[y][2] * m2.m[2][x] + m[y][3] * m2.m[3][x];
     return mr;
   }
 
@@ -121,4 +121,3 @@ class Matrix
     return *this;
   }
 };
-

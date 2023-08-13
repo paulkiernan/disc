@@ -2,7 +2,7 @@
 #include "Logging.h"
 #include "ColorPalette.h"
 
-#include <limits.h> 
+#include <limits.h>
 
 CMovingCar::CMovingCar(CFrame* frame)
 {
@@ -53,14 +53,14 @@ void CMovingCar::Show()
     for (auto i = m_coords.begin(); i != m_coords.end(); i++)
     {
         if (
-            ( (i->x > 0) && (i->x < (int)p_frame->GetGridWidth() )) && 
+            ( (i->x > 0) && (i->x < (int)p_frame->GetGridWidth() )) &&
             ( (i->y > 0) && (i->y < (int)p_frame->GetGridHeight()))
         )
         {
             uint16_t index = p_frame->XYSafeInverted(i->x, i->y);
             p_frame->SetPixel(
                 index,
-                ColorPalette::Black 
+                ColorPalette::Black
             );
         }
         else {
@@ -141,7 +141,7 @@ void CMovingCar::Continue()
                 }
             }
         }
-        m_delay_until = now + m_movement_rate; 
+        m_delay_until = now + m_movement_rate;
     }
 
     if ((m_coords.size() == 0) && (now > m_delay_until))

@@ -1,4 +1,4 @@
-/*  OctoWS2811 + FastLED Teensy 4.0 Window Controller 
+/*  OctoWS2811 + FastLED Teensy 4.0 Window Controller
 
   Required Connections
   --------------------

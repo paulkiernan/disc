@@ -29,7 +29,7 @@ class CFrame
         size_t                  GetGridHeight()                     { return m_grid_height; }
 
     private:
-        size_t                  m_grid_width  = -1; 
+        size_t                  m_grid_width  = -1;
         size_t                  m_grid_height = -1;
         CRGB*                   p_leds;
         std::vector<CGeometry*> m_geometries;

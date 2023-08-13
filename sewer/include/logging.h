@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-void printTimestamp(Print* _logOutput); 
-void logFPS(const int seconds); 
-void blinkLED(const int ledPin, const int seconds); 
+void printTimestamp(Print* _logOutput);
+void logFPS(const int seconds);
+void blinkLED(const int ledPin, const int seconds);
 
 #endif

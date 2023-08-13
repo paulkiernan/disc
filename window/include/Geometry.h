@@ -53,7 +53,7 @@ class CGeometry
         virtual void Continue();
 
     private:
-        static std::set<Coordinate> coords; 
+        static std::set<Coordinate> coords;
         CFrame* p_frame;
 
 };

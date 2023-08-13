@@ -14,7 +14,7 @@ class CTrafficLight: public CGeometry
 
     private:
         CFrame*              p_frame;
-        static std::set<Coordinate> s_coords; 
+        static std::set<Coordinate> s_coords;
         static bool                 s_stopped;
         static size_t               s_delay_until;
 

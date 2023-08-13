@@ -53,9 +53,9 @@ CDisc::CDisc()
         c_window_height,    // height
         s_leds              // leds
     );
-    m_frame->AddGeometry(new CPayphoneLight(m_frame)); 
-    m_frame->AddGeometry(new CTrafficLight(m_frame)); 
-    m_frame->AddGeometry(new CMovingCar(m_frame)); 
+    m_frame->AddGeometry(new CPayphoneLight(m_frame));
+    m_frame->AddGeometry(new CTrafficLight(m_frame));
+    m_frame->AddGeometry(new CMovingCar(m_frame));
 
     Log.infoln("CDisc::CDisc: Initial allocations complete, %u bytes of RAM remaining", freeram());
 }
@@ -72,9 +72,9 @@ CDisc::~CDisc()
 void CDisc::Show()
 {
     m_frame->Show();
-    for(auto geom : m_frame->GetGeometries()) 
+    for(auto geom : m_frame->GetGeometries())
     {
-        geom->Continue(); 
+        geom->Continue();
     }
 
     FastLED.show();

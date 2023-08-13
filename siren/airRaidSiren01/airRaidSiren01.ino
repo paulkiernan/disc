@@ -21,21 +21,21 @@ void setup() {
 }
 
 void loop() {
-  
+
   if(running) {
     if (firstRun) {
       blinkStart();
-      
+
       firstRun = false;
       accelerateEngineSmoothly();
     }
-    
+
     runNormally();
   }
   else {
     stopEngine();
   }
-  
+
   delay(500);
 }
 
@@ -43,7 +43,7 @@ void calibrate() {
   motor.write(180);
   delay(13000);
   blink(1);
-  
+
   motor.write(0);
   delay(10000);
   blink(2);
@@ -53,7 +53,7 @@ void calibrate() {
 
 void accelerateEngineSmoothly() {
   int motorSpeed = MIN_PULSE_LENGTH + 50;
-  
+
   while(motorSpeed < HIGH_PULSE_LENGTH) {
     motorSpeed = motorSpeed + 1;
     motor.writeMicroseconds(motorSpeed);
@@ -67,7 +67,7 @@ int runNormally() {
     if(!running) {
       return 0;
     }
-    
+
     if (i == 1) {
       motor.writeMicroseconds(HIGH_PULSE_LENGTH);
     }
@@ -76,12 +76,12 @@ int runNormally() {
 
   // 2
   int motorSpeed = HIGH_PULSE_LENGTH;
-  
+
   while(motorSpeed > LOW_PULSE_LENGTH) {
     if(!running) {
       return 0;
     }
-    
+
     motorSpeed = motorSpeed - 1;
     motor.writeMicroseconds(motorSpeed);
     delay(100);
@@ -102,12 +102,12 @@ int runNormally() {
 
   // 4
   motorSpeed = LOW_PULSE_LENGTH;
-  
+
   while(motorSpeed < HIGH_PULSE_LENGTH) {
     if(!running) {
       return 0;
     }
-    
+
     motorSpeed = motorSpeed + 1;
     motor.writeMicroseconds(motorSpeed);
     delay(75);

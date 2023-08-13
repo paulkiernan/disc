@@ -3,7 +3,7 @@
 #include "TriangleTree.h"
 
 class CompositeGraphics
-{ 
+{
   public:
   int xres;
   int yres;
@@ -13,14 +13,14 @@ class CompositeGraphics
   int cursorX, cursorY, cursorBaseX;
   int frontColor, backColor;
   Font<CompositeGraphics> *font;
-  
+
   TriangleTree<CompositeGraphics> *triangleBuffer;
   TriangleTree<CompositeGraphics> *triangleRoot;
   int trinagleBufferSize;
   int triangleCount;
 
   CompositeGraphics(int w, int h, int initialTrinagleBufferSize = 0)
-    :xres(w), 
+    :xres(w),
     yres(h)
   {
     font = 0;
@@ -37,7 +37,7 @@ class CompositeGraphics
     frontColor = front;
     backColor = back;
   }
-  
+
   void init()
   {
     frame = (char**)malloc(yres * sizeof(char*));
@@ -57,13 +57,13 @@ class CompositeGraphics
   {
     this->font = &font;
   }
-  
+
   void setCursor(int x, int y)
   {
-    cursorX = cursorBaseX = x;  
-    cursorY = y;  
+    cursorX = cursorBaseX = x;
+    cursorY = y;
   }
-  
+
   void print(char *str)
   {
     if(!font) return;
@@ -75,12 +75,12 @@ class CompositeGraphics
       if(cursorX + font->xres > xres || *str == '\n')
       {
         cursorX = cursorBaseX;
-        cursorY += font->yres;        
+        cursorY += font->yres;
       }
       str++;
     }
   }
-  
+
   void print(int number, int base = 10, int minCharacters = 1)
   {
     bool sign = number < 0;
@@ -115,26 +115,26 @@ class CompositeGraphics
   {
     backbuffer[y][x] = color;
   }
-  
+
   inline void dot(int x, int y, char color)
   {
     if((unsigned int)x < xres && (unsigned int)y < yres)
       backbuffer[y][x] = color;
   }
-  
+
   inline void dotAdd(int x, int y, char color)
   {
     if((unsigned int)x < xres && (unsigned int)y < yres)
       backbuffer[y][x] = min(54, color + backbuffer[y][x]);
   }
-  
+
   inline char get(int x, int y)
   {
     if((unsigned int)x < xres && (unsigned int)y < yres)
       return backbuffer[y][x];
     return 0;
   }
-    
+
   inline void xLine(int x0, int x1, int y, char color)
   {
     if(x0 > x1)
@@ -204,7 +204,7 @@ class CompositeGraphics
       xac += xaci;
     }
   }
-  
+
   void line(int x1, int y1, int x2, int y2, char color)
   {
     int x, y, xe, ye;
@@ -289,7 +289,7 @@ class CompositeGraphics
       }
     }
   }
-  
+
   inline void flush()
   {
     if(triangleRoot)
@@ -300,7 +300,7 @@ class CompositeGraphics
   {
     char **b = backbuffer;
     backbuffer = frame;
-    frame = b;    
+    frame = b;
   }
 
   void fillRect(int x, int y, int w, int h, int color)
@@ -332,4 +332,3 @@ class CompositeGraphics
     fillRect(x + w - 1, y, 1, h, color);
   }
 };
-

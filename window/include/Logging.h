@@ -4,6 +4,6 @@
 #include <ArduinoLog.h>
 #include <Arduino.h>
 
-void printTimestamp(Print* _logOutput); 
+void printTimestamp(Print* _logOutput);
 
 #endif

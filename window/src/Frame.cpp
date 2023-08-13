@@ -50,7 +50,7 @@ void CFrame::AddGeometry(CGeometry* geom)
 //     No error checking is performed on the ranges of x and y.
 size_t CFrame::XY( size_t x, size_t y){
   size_t i;
-  
+
   if( y & 0x01) {  // Odd rows run backwards
     size_t reverseX = (m_grid_width - 1) - x;
     i = (y * m_grid_width) + reverseX;
@@ -64,7 +64,7 @@ size_t CFrame::XY( size_t x, size_t y){
 // XYSafe(x,y) takes x and y coordinates and returns an LED index number, for
 // use like this:  leds[ XYSafe(x,y) ] == CRGB::Red;
 //     Error checking IS performed on the ranges of x and y, and an index of
-//     "-1" is returned. 
+//     "-1" is returned.
 size_t CFrame::XYSafe( size_t x, size_t y){
   if( x >= m_grid_width)
   {
@@ -81,13 +81,13 @@ size_t CFrame::XYSafe( size_t x, size_t y){
 // XYSafeInverted(x,y) takes x and y coordinates and returns an LED index
 // number, for use like this:  leds[ XYSafeInverted(x,y) ] == CRGB::Red;
 //
-// This function exists alongside the XYSafe(x, y) function simply because the 
+// This function exists alongside the XYSafe(x, y) function simply because the
 // the X/Y orientation of the window we're trying to draw on is inverted and
 // it's much easier for a human to reason about a coordinate system starting
 // from (0, 0) vs ANYTHING else.
 //
 //     Error checking IS performed on the ranges of x and y, and an index of
-//     "-1" is returned. 
+//     "-1" is returned.
 size_t CFrame::XYSafeInverted( size_t x, size_t y){
   return XYSafe(m_grid_width - x - 1,m_grid_height - y - 1);
 }

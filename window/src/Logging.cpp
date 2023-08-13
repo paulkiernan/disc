@@ -1,6 +1,6 @@
 #include "Logging.h"
 
-// Formats the current runtime ms into HOURS:MINUTES:SECONDS:MILLISECONDS 
+// Formats the current runtime ms into HOURS:MINUTES:SECONDS:MILLISECONDS
 void printTimestamp(Print* _logOutput) {
   char c[19];
   uint32_t ms = millis();

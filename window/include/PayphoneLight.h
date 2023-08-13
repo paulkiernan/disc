@@ -14,11 +14,11 @@ class CPayphoneLight: public CGeometry
 
     private:
         CFrame*              p_frame;
-        static std::set<Coordinate> s_coords; 
-        static uint8_t              s_flicker_count; 
-        static uint8_t              s_flickers_remaining; 
-        static bool                 s_flicker_high; 
-        static size_t               s_delay_until; 
+        static std::set<Coordinate> s_coords;
+        static uint8_t              s_flicker_count;
+        static uint8_t              s_flickers_remaining;
+        static bool                 s_flicker_high;
+        static size_t               s_delay_until;
 };
 
 #endif

@@ -31,7 +31,7 @@ void CTrafficLight::Continue()
         for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
             size_t index = p_frame->XYSafeInverted(itr->x, itr->y);
             p_frame->SetPixel(
-                index, 
+                index,
                 blend(
                     ColorPalette::StopLightGo,
                     ColorPalette::DominantWindow,
@@ -49,7 +49,7 @@ void CTrafficLight::Continue()
         for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
             size_t index = p_frame->XYSafeInverted(itr->x, itr->y);
             p_frame->SetPixel(
-                index, 
+                index,
                 blend(
                     ColorPalette::StopLightStop,
                     ColorPalette::DominantWindow,

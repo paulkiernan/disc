@@ -34,7 +34,7 @@ class CDisc
         size_t XY(size_t x, size_t y);
         size_t XYSafe(size_t x, size_t y);
 
-    public: 
+    public:
         virtual void Show();
 
     private:

@@ -53,7 +53,7 @@ void CPayphoneLight::Continue()
                     blend(
                         ColorPalette::White,
                         ColorPalette::PhoneLight,
-                        200 
+                        200
                     )
                 );
             }
@@ -93,7 +93,7 @@ void CPayphoneLight::Continue()
             s_flicker_count = 0;
         }
     }
-    else 
+    else
     {
         if (millis() > s_delay_until + 30000)
         {
@@ -104,7 +104,7 @@ void CPayphoneLight::Continue()
                 s_flickers_remaining = num_flickers;
             }
         }
-        else 
+        else
         {
             for (auto itr = s_coords.begin(); itr != s_coords.end(); itr++){
                 uint16_t index = p_frame->XYSafeInverted(itr->x, itr->y);
@@ -113,7 +113,7 @@ void CPayphoneLight::Continue()
                     blend(
                         ColorPalette::PhoneLight,
                         ColorPalette::DominantWindow,
-                        150 
+                        150
                     )
                 );
             }

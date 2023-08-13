@@ -84,7 +84,7 @@ void flicker(int start_index, int end_index, CRGB* leds)
     int original_colour_r = leds[start_index].r;
     int original_colour_g = leds[start_index].g;
     int original_colour_b = leds[start_index].b;
-    
+
     int number_flickers = random(1, 5);
 
     for (int i=0; i < number_flickers; i++) {
@@ -141,7 +141,7 @@ void loop() {
     Serial.println(colorIndex, DEC);
     for(int dot = 0; dot < NUM_LEDS; dot++)
     {
-      led_strip_AUX[dot] = colors[colorIndex]; 
+      led_strip_AUX[dot] = colors[colorIndex];
     }
     colorCorrectDifferentStrips(led_strip_AUX);
     lastChange = millis();
@@ -161,7 +161,7 @@ void loop() {
       led_strip_AUX
     );
   }
-  
+
   digitalWrite(LED_PIN, HIGH);   // set the LED on
   delay(period);                  // wait for a second
   digitalWrite(LED_PIN, LOW);    // set the LED off

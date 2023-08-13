@@ -7,7 +7,7 @@ class Image
   int xres;
   int yres;
   const unsigned char *pixels;
-  
+
   Image(int xres_, int yres_, const unsigned char *pixels_)
     :xres(xres_),
     yres(yres_),
@@ -36,7 +36,7 @@ class Image
         g.dot(px + x, py + y, pixels[i++]);
     }
   }
-  
+
   void draw(Graphics &g, int x, int y, int t)
   {
     int i = 0;
@@ -47,7 +47,7 @@ class Image
         if(c != t) g.dot(px + x, py + y, c);
       }
   }
-  
+
   void drawAdd(Graphics &g, int x, int y)
   {
     int i = 0;
@@ -56,4 +56,3 @@ class Image
         g.dotAdd(px + x, py + y, pixels[i++]);
   }
 };
-

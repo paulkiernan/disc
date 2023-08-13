@@ -3,7 +3,7 @@ class TriangleTree
 {
   public:
   short *v[3];
-  int z;  
+  int z;
   TriangleTree<Graphics> *left, *right;
   int depth;
   char color;
@@ -32,7 +32,7 @@ class TriangleTree
   {
     return left ? left->depth : 0;
   }
-  
+
   int rightDepth()
   {
     return right ? right->depth : 0;
@@ -42,9 +42,9 @@ class TriangleTree
   {
     int l = leftDepth();
     int r = rightDepth();
-    depth = l > r ? l : r; 
+    depth = l > r ? l : r;
   }
-  
+
   int add(TriangleTree **origin, TriangleTree &t)
   {
     int d = 1;
@@ -53,7 +53,7 @@ class TriangleTree
       if(left)
         d = left->add(&left, t);
       else
-        left = &t;      
+        left = &t;
     }
     else
     {
@@ -117,9 +117,7 @@ class TriangleTree
         (*origin)->depth = rr > depth ? rr + 1 : depth + 1;
         return (*origin)->depth + 1;
       }
-    }            
+    }
     return depth;
   }
 };
-
-

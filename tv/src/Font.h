@@ -7,7 +7,7 @@ class Font
   int xres;
   int yres;
   const unsigned char *pixels;
-  
+
   Font(int charWidth, int charHeight, const unsigned char *pixels_)
     :xres(charWidth),
     yres(charHeight),
@@ -27,4 +27,3 @@ class Font
           g.dot(px + x, py + y, backColor);
   }
 };
-

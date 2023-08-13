@@ -1,7 +1,7 @@
 #include "logging.h"
 #include <ArduinoLog.h>
 
-// Formats the current runtime ms into HOURS:MINUTES:SECONDS:MILLISECONDS 
+// Formats the current runtime ms into HOURS:MINUTES:SECONDS:MILLISECONDS
 void printTimestamp(Print* _logOutput) {
   char c[19];
   uint32_t ms = millis();
@@ -15,12 +15,12 @@ void printTimestamp(Print* _logOutput) {
   _logOutput->print(c);
 }
 
-// Logs the framerate of the FastLED loop on every `seconds` 
+// Logs the framerate of the FastLED loop on every `seconds`
 static inline void logFPS(const int seconds) {
   static uint32_t lastMillis;
   static uint32_t frameCount;
   static uint16_t framesPerSecond;
-  
+
   uint32_t now = millis();
   frameCount ++;
   if (now - lastMillis >= seconds * 1000) {
@@ -31,13 +31,13 @@ static inline void logFPS(const int seconds) {
   }
 }
 
-// Blinks the on-board LED every `milliseconds` 
+// Blinks the on-board LED every `milliseconds`
 static inline void blinkLED(const int ledPin, const int milliseconds) {
   static uint32_t lastMillis;
   static uint8_t ledState;
 
   pinMode(ledPin, OUTPUT);
-  
+
   uint32_t now = millis();
   if (now - lastMillis >= milliseconds) {
     if (ledState == LOW) {

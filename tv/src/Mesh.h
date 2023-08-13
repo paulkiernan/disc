@@ -14,7 +14,7 @@ class Mesh
   signed char (*tTriNormals)[3];
   const unsigned short (*triangles)[3];
   const unsigned short (*edges)[2];
-  
+
   Mesh(
       int vertCount,
       const float verts[][3],
@@ -45,14 +45,14 @@ class Mesh
   void drawTriangles(Graphics &g, char color)
   {
     const float scaleN = 1.0f / 127.0f;
-    
+
     for(int i = 0; i < triangleCount; i++)
     {
       short *v0 = tvertices[triangles[i][0]];
       short *v1 = tvertices[triangles[i][1]];
       short *v2 = tvertices[triangles[i][2]];
       int dx1 = v1[0] - v0[0];
-      int dy1 = v1[1] - v0[1]; 
+      int dy1 = v1[1] - v0[1];
       int dx2 = v2[0] - v0[0];
       int dy2 = v2[1] - v0[1];
       if(dx1 * dy2 - dx2 * dy1 < 0)
@@ -70,8 +70,8 @@ class Mesh
           const float ny = normal[1] * scaleN;
           const float nz = normal[2] * scaleN;
 
-          const float L[3] = { 0, 0, -1 }; 
-          
+          const float L[3] = { 0, 0, -1 };
+
           const float NdotL = max(0.0f, nx * L[0] + ny * L[1] + nz * L[2]);
           c = (char) (color * NdotL + 0.5);
         }
@@ -89,7 +89,7 @@ class Mesh
       g.line(tvertices[edges[i][0]][0], tvertices[edges[i][0]][1], tvertices[edges[i][1]][0], tvertices[edges[i][1]][1], color);
     }
   }
-    
+
   void drawVertices(Graphics &g, char color)
   {
     for(int i = 0; i < vertexCount; i++)
@@ -115,4 +115,3 @@ class Mesh
       }
   }
 };
-
