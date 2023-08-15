@@ -486,6 +486,21 @@ flask = ">=2.2.5"
 sqlalchemy = ">=1.4.18"
 
 [[package]]
+name = "flask-view-counter"
+version = "0.1.2"
+description = "Adds lightweight request metrics to flask applications"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "flask-view-counter-0.1.2.tar.gz", hash = "sha256:e8ba980dbf21d4f860236da99660f1ef69ee99b4dd46f3dd3e95d182db4f4ea5"},
+    {file = "flask_view_counter-0.1.2-py3-none-any.whl", hash = "sha256:66d44c73bfe83fcdeee706bb25f92b0f8291d0084be0df78703d4909d5568a54"},
+]
+
+[package.dependencies]
+Flask = "*"
+flask-sqlalchemy = "*"
+
+[[package]]
 name = "ghp-import"
 version = "2.1.0"
 description = "Copy your docs directly to the gh-pages branch."
@@ -1531,4 +1546,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "906db50efe96bd3e2ef9d8e0131ef3ee4c968a89dc805819615483ed2590f567"
+content-hash = "9637a290a99edeb7191ade1cd36cef627434c1b972ff1f3aa327f5a5a0d35c28"

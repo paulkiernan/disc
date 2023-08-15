@@ -7,6 +7,7 @@ from .views import egggame
 from .views import home
 from .views import bait
 from .views import api_bait_reservation
+from .views import wipeout
 
 bp = Blueprint(
     "webui",
@@ -23,6 +24,7 @@ bp.add_url_rule("/egggame.html", view_func=egggame)
 bp.add_url_rule("/home.html", view_func=home)
 bp.add_url_rule("/bait.html", view_func=bait)
 bp.add_url_rule("/bait.html", view_func=api_bait_reservation, methods=["GET", "POST"])
+bp.add_url_rule("/wipeout.html", view_func=wipeout)
 
 
 def init_app(app):

@@ -1,12 +1,11 @@
-from flask import abort
 from flask import redirect
 from flask import render_template
 from flask import request
 
+from disc_web.ext.database import db
 from disc_web.models import Guestlog
 from disc_web.models import Reservation
 from disc_web.models import ReservationChangelog
-from disc_web.ext.database import db
 
 
 def index():
@@ -51,3 +50,7 @@ def api_bait_reservation():
     db.session.commit()
 
     return redirect("/bait.html")
+
+
+def wipeout():
+    return render_template("wipeout.html")

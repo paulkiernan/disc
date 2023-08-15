@@ -15,6 +15,7 @@ dynaconf = "^3.2.0"
 click = "^8.1.6"
 Flask-RESTful = "^0.3.10"
 gunicorn = "^21.2.0"
+flask-view-counter = "^0.1.2"
 
 [tool.poetry.group.dev.dependencies]
 ipdb = "^0.13.13"

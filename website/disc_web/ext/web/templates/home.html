@@ -7,7 +7,9 @@
   <title>INFORMATION SUPERHIGHWAY</title>
   <script src=" {{ url_for('.static', filename='js/browser.js') }}"></script>
   <script>
-    new cursoreffects.ghostCursor()
+    window.addEventListener("load", (event) => {
+      new cursoreffects.ghostCursor();
+    });
   </script>
 </head>
 <body>
@@ -26,7 +28,8 @@
     <nav id="menu">
       <ul>
         <li><a href="guestbook.html" target="main_iframe">Guestbook</a></li>
-        <li><a href="egggame.html" target="main_iframe">Games</a></li>
+        <li><a href="wipeout.html" target="main_iframe">wip3out</a></li>
+        <li><a href="egggame.html" target="main_iframe">Cool game</a></li>
         <li><a href="bait.html" target="main_iframe">Ramshackle Bait + Tackle Reservations</a></li>
       </ul>
     </nav>
@@ -42,7 +45,14 @@
 
   </td>
   <td style="width: 100%; height: 100%;">
-    <iframe name="main_iframe" src="/guestbook.html" width="100%" height="700" frameborder="2"></iframe>
+    <iframe
+        id="main_iframe"
+        name="main_iframe"
+        src="guestbook.html"
+        width="100%"
+        height="700"
+        frameborder="2"
+    ></iframe>
   </td>
   </tr>
   <table>

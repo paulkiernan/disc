@@ -19,3 +19,7 @@ poetry run gunicorn --bind 0.0.0.0:8080 "wsgi:application"
 ```bash
 poetry export -f requirements.txt --output requirements.txt
 ```
+
+## Credits:
+
+[Dominic Szablewski for their incredible work porting wip3out to WASM](https://phoboslab.org/log/2023/08/rewriting-wipeout)
