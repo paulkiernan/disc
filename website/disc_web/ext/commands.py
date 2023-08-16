@@ -4,6 +4,7 @@ from disc_web.ext.database import db
 
 from disc_web.models import Guestlog
 from disc_web.models import Reservation
+from disc_web.models import ViewCount
 
 
 def create_db():
@@ -25,6 +26,7 @@ def populate_db():
             id=1,
             content="Hi my name is Team Player and I'd like a chef's tasting menu at Ramshackle Bait and Tackle for my dog's birthday tonight at 8pm. Fuck yer burn.",
         ),
+        ViewCount(id=1, counter=0),
     ]
     db.session.bulk_save_objects(data)
     db.session.commit()

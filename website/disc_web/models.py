@@ -26,3 +26,8 @@ class ReservationChangelog(db.Model):
 
     time_created = db.Column(db.DateTime(timezone=False), server_default=func.now())
     time_updated = db.Column(db.DateTime(timezone=False), onupdate=func.now())
+
+
+class ViewCount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    counter = db.Column(db.Integer)
