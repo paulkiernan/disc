@@ -15,9 +15,15 @@
       new cursoreffects.ghostCursor();
     });
 
-    setInterval(function () {
+    // Refresh to dialup after 15 minutes
+    setTimeout(function() {
       window.location = "/"
     }, 1000 * 60 * 15);
+
+    // Spam a lot of popups at 14.5 minutes
+    setTimeout(function() {
+      setInterval(popup, 200);
+    }, 1000 * 60 * 14 + 1000 * 30);
 
     function popup() {
       let xmin = 0;
@@ -113,7 +119,8 @@
   </div>
 
   <script>
-    setInterval(popup, 1000 * 60 * 2);
+    // Spawn a random set of popups every 15 minutes
+    setInterval(popup, 1000 * 60 * 5);
   </script>
 </body>
 </html>
