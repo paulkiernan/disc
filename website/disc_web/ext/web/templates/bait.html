@@ -23,18 +23,19 @@
       <TBODY>
         <TR>
           <TD>
-            <IMG style="width:200px;" SRC="{{ url_for('.static', filename='images/ramshackle/fish-swim.gif') }}">
+            <IMG style="width:100px;" SRC="{{ url_for('.static', filename='images/ramshackle/fish-swim.gif') }}">
           </TD>
           <TD>
             <marquee direction="down" width="500" height="200" behavior="alternate">
               <marquee behavior="alternate">
-  <h1>Ramshackle Bait and Tackle Reservation System</h1>
+                <h1>Ramshackle Bait and Tackle</h1>
+                <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reservation System</h1>
               </marquee>
             </marquee>
           </div>
           </TD>
           <TD>
-            <IMG style="width:200px;" SRC="{{ url_for('.static', filename='images/ramshackle/fish-swim.gif') }}">
+            <IMG style="width:100px;" SRC="{{ url_for('.static', filename='images/ramshackle/fish-swim.gif') }}">
           </TD>
         </TR>
       </TBODY>
@@ -44,7 +45,7 @@
   <form style="margin: 0 auto; width: 80%;" method="post">
       <div class='form-group'>
         {# note we use same name for Save and Cancel buttons, but a different value #}
-        <button type="submit" name="submit" value="submit" class="btn btn-info">Save</button>
+        <button type="submit" name="submit" value="submit" class="btn btn-danger">Save</button>
         <button type="cancel" name="submit" value="cancel" class="btn btn-secondary">Cancel</button>
       </div>
     <div class='form-group'>
@@ -57,7 +58,6 @@
         toolbar: [
           ['style', ['style']],
           ['font', ['bold', 'underline', 'clear']],
-          ['fontname', ['fontname']],
           ['color', ['color']],
           ['para', ['ul', 'ol', 'paragraph']],
           ['table', ['table']],

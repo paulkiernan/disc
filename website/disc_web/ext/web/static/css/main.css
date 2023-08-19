@@ -6,6 +6,7 @@ html, body {
   background-image: url('/cgi_bin/static/images/bgstars.gif');
   background-color: #000;
   height: 100%;
+  overflow-x: hidden;
 }
 
 .center{
@@ -13,7 +14,6 @@ html, body {
 }
 
 .guestbook h1 {
-  font-family: cursive;
   font-size: 30px;
 }
 

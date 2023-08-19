@@ -17,9 +17,9 @@
     let popup_img = document.createElement('div');
     let popup_title = document.createElement('div');
     let popup_btns = document.createElement('div');
-    let title_html = `<div class="title-bar"><div class="title-bar-text"> Popup </div><div class="title-bar-controls"> <button class="popup__close" aria-label="Close"></button> </div></div>`
+    let title_html = `<div class="title-bar"><div class="title-bar-text">Fun Virus!</div><div class="title-bar-controls"> <button class="popup__close" aria-label="Close"></button> </div></div>`
     let img_html = `<img src="${SETTINGS.imgSrc}">`;
-    let btns_html = `<section class="field-row" style="justify-content: flex-end"><button type="button" class="popup__close">Okay</button></section>`;
+    let btns_html = `<section class="field-row" style="justify-content: flex-end"><button type="button" class="popup__close">Sure</button></section>`;
 
     popup_title.innerHTML = title_html;
     popup_img.innerHTML = img_html;

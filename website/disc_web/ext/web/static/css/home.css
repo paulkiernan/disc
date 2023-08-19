@@ -6,6 +6,7 @@ html, body {
   background-image: url('/cgi_bin/static/images/bgstars.gif');
   background-color: #000;
   height: 100%;
+  overflow: hidden;
 }
 
 a {
@@ -27,6 +28,15 @@ p {
       0 0 92px #0fa,
       0 0 102px #0fa,
       0 0 151px #0fa;
+  font-size: 25px;
+}
+
+ul li::before {
+    content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
+    color: hotpink; /* Change the color */
+    font-weight: bold; /* If you want it to be bold */
+    width: 1em; /* Also needed for space (tweak if needed) */
+    margin-left: -1em; /* Also needed for space (tweak if needed) */
 }
 
 .center{
@@ -46,7 +56,7 @@ p {
 #nav {
   padding: 0;
   margin: 2px;
-  width: 205px;
+  width: 170px;
   border: 1px solid #000;
 }
 
